@@ -1,30 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
-import 'order/menu.dart';  // Import the menu.dart file
+import 'package:academeats_mobile/pages/home.dart';
+
+import 'package:academeats_mobile/models/cart.dart';
 
 void main() {
-  runApp(
-    MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => OrderProvider()),
-      ],
-      child: const MyApp(),
-    ),
-  );
+  runApp(const MaterialApp(
+    title: 'AcademEats',
+    home: MainApp(),
+  ));
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class MainApp extends StatelessWidget {
+  const MainApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Order App',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const HomeScreen(),
+    return MultiProvider(
+      providers: [
+        Provider(create: (_) => CookieRequest()),
+        ChangeNotifierProvider(
+            create: (_) => Cart()
+        )
+      ],
+      child: const HomeScreen(),
     );
   }
 }
-
