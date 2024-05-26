@@ -15,7 +15,7 @@ class _EditMakananPageState extends State<EditMakananPage> {
   void dispose() {
     _namaController.dispose();
     _hargaController.dispose();
-    _stokController.dispose();
+    _stokController.dispose();f
     super.dispose();
   }
 
