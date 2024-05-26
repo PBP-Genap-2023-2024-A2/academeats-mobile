@@ -1,30 +1,41 @@
 import 'package:flutter/material.dart';
-import 'package:pbp_django_auth/pbp_django_auth.dart';
-import 'package:provider/provider.dart';
-import 'package:academeats_mobile/pages/home.dart';
-
-import 'package:academeats_mobile/models/cart.dart';
+import 'makanan/edit.dart'; // Import the EditMakananPage widget
 
 void main() {
-  runApp(const MaterialApp(
-    title: 'AcademEats',
-    home: MainApp(),
-  ));
+  runApp(MyApp());
 }
 
-class MainApp extends StatelessWidget {
-  const MainApp({super.key});
-
+class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        Provider(create: (_) => CookieRequest()),
-        ChangeNotifierProvider(
-            create: (_) => Cart()
-        )
-      ],
-      child: const HomeScreen(),
+    return MaterialApp(
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: HomePage(),
+      routes: {
+        '/edit': (context) => EditMakananPage(), // Define the route for the EditMakananPage
+      },
+    );
+  }
+}
+
+class HomePage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Home Page'),
+      ),
+      body: Center(
+        child: ElevatedButton(
+          onPressed: () {
+            Navigator.pushNamed(context, '/edit'); // Navigate to the EditMakananPage
+          },
+          child: Text('Go to Edit Makanan Page'),
+        ),
+      ),
     );
   }
 }
