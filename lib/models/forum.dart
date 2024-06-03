@@ -1,4 +1,6 @@
-class Forum {
+import 'package:academeats_mobile/models/base_model.dart';
+
+class Forum implements ISendable {
   int pk;
   String name;
   String description;
@@ -18,6 +20,7 @@ class Forum {
     dateAdded: DateTime.parse(json["date_added"]),
   );
 
+  @override
   Map<String, dynamic> toJson() => {
     "pk": pk,
     "name": name,
