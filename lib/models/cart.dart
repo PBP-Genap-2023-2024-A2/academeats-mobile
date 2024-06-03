@@ -3,6 +3,8 @@ import 'dart:collection';
 import 'package:academeats_mobile/models/makanan.dart';
 import 'package:flutter/material.dart';
 
+import 'package:academeats_mobile/models/base_model.dart';
+
 class Cart extends ChangeNotifier {
   final List<CartObject> _items = [];
 
@@ -19,7 +21,7 @@ class Cart extends ChangeNotifier {
   }
 }
 
-class CartObject {
+class CartObject implements ISendable {
   int pk;
   Makanan makanan;
   int jumlah;
@@ -36,6 +38,7 @@ class CartObject {
     jumlah: json['jumlah'],
   );
 
+  @override
   Map<String, dynamic> toJson() => {
     'pk': pk,
     'makanan': makanan.toJson(),
