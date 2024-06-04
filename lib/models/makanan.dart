@@ -1,6 +1,7 @@
+import 'package:academeats_mobile/models/base_model.dart';
 import 'package:academeats_mobile/models/toko.dart';
 
-class Makanan {
+class Makanan implements ISendable {
   int pk;
   String nama;
   double harga;
