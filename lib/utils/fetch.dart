@@ -88,5 +88,15 @@ Future<Map<String, dynamic>> fetchData(String path,
     responseBody += element;
   });
 
-  return jsonDecode(responseBody);
+  var data = jsonDecode(responseBody);
+
+  Map<String, dynamic> returned;
+
+  if (data is List) {
+    returned = {'data': data};
+  } else {
+    returned = data;
+  }
+
+  return returned;
 }
