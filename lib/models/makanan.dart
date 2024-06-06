@@ -6,7 +6,7 @@ class Makanan {
   double harga;
   int stok;
   String imgUrl;
-  Toko toko;
+  Toko? toko;
 
   Makanan({
     required this.pk,
@@ -14,7 +14,7 @@ class Makanan {
     required this.harga,
     required this.stok,
     required this.imgUrl,
-    required this.toko,
+    this.toko,
   });
 
   factory Makanan.fromJson(Map<String, dynamic> json) => Makanan(
@@ -32,6 +32,6 @@ class Makanan {
     'harga': harga,
     'stok': stok,
     'img_url': imgUrl,
-    'toko': toko.toJson(),
+    'toko': toko?.toJson(),
   };
 }

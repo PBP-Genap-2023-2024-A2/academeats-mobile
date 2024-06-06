@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'edit.dart';
+import 'tambah.dart';
 
 class MakananHome extends StatelessWidget {
   const MakananHome({super.key});

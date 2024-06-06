@@ -1,25 +1,57 @@
+import 'package:academeats_mobile/models/makanan.dart';
 import 'package:flutter/material.dart';
-import 'makanan/edit.dart'; // Import the EditMakananPage widget
+import 'makanan/detail.dart';
+import 'makanan/tambah.dart';
+import 'models/toko.dart'; // Import the EditMakananPage widget
 
 void main() {
   runApp(MyApp());
 }
-
+//
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      initialRoute: '/',
+      routes:{
+        '/edit':(context) => EditMakananPage(),
+        '/tambah': (context) =>
+      } ,
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
       home: HomePage(),
-      routes: {
-        '/edit': (context) => EditMakananPage(), // Define the route for the EditMakananPage
-      },
     );
   }
 }
+
+// class HomePage extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return DetailMakananScreen(
+//       Makanan(pk: 1, nama: "Budi", harga: 10000,stok: 10,imgUrl: "")
+//     );
+//   }
+// }
+//
+// class DetailMakananScreen extends StatelessWidget {
+//   final Makanan makanan;
+//
+//   const DetailMakananScreen(this.makanan, {super.key});
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Column(
+//       children: [
+//         Text(makanan.nama),
+//         Text(makanan.harga.toString()),
+//       ],
+//     );
+//   }
+//
+//
+// }
 
 class HomePage extends StatelessWidget {
   @override
@@ -29,11 +61,23 @@ class HomePage extends StatelessWidget {
         title: Text('Home Page'),
       ),
       body: Center(
-        child: ElevatedButton(
-          onPressed: () {
-            Navigator.pushNamed(context, '/edit'); // Navigate to the EditMakananPage
-          },
-          child: Text('Go to Edit Makanan Page'),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/edit'); // Navigate to the EditMakananPage
+              },
+              child: Text('Go to Edit Makanan Page'),
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/detail'); // Navigate to the MakananPage
+              },
+              child: Text('Go to Makanan Page'),
+            ),
+          ],
         ),
       ),
     );
