@@ -1,9 +1,13 @@
-import 'package:academeats_mobile/forms/models/review.dart';
-import 'package:academeats_mobile/menu.dart';
 import 'package:flutter/material.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
-import 'order/menu.dart';  // Import the menu.dart file
+//import 'package:academeats_mobile/pages/home.dart';
+
+//Ngetes doang, nanti ganti lagi jadi home.dart
+import 'package:academeats_mobile/pages/review/show_review.dart';
+import 'package:academeats_mobile/pages/review/reply_review.dart';
+
+import 'package:academeats_mobile/models/cart.dart';
 
 void main() {
   runApp(const MaterialApp(
@@ -12,17 +16,24 @@ void main() {
   ));
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class MainApp extends StatelessWidget {
+    const MainApp({Key? key}) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Order App',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const HomeScreen(),
-    );
-  }
+    @override
+    Widget build(BuildContext context) {
+        return Provider(
+            create: (_) {
+                CookieRequest request = CookieRequest();
+                return request;
+            },
+            child: MaterialApp(
+                title: 'Flutter App',
+                theme: ThemeData(
+                    colorScheme: ColorScheme.fromSeed(seedColor: Colors.indigo),
+                    useMaterial3: true,
+                ),
+                home: const HomeScreen(),
+            ),
+        );
+    }
 }

@@ -9,12 +9,14 @@ List<Review> reviewFromJson(String str) => List<Review>.from(json.decode(str).ma
 String reviewToJson(List<Review> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 class Review {
+    dynamic nama;
     int nilai;
     String komentar;
-    String? reply;
+    String reply;
     String namaMakanan;
 
     Review({
+        required this.nama,
         required this.nilai,
         required this.komentar,
         required this.reply,
@@ -22,6 +24,7 @@ class Review {
     });
 
     factory Review.fromJson(Map<String, dynamic> json) => Review(
+        nama: json["nama"],
         nilai: json["nilai"],
         komentar: json["komentar"],
         reply: json["reply"],
@@ -29,6 +32,7 @@ class Review {
     );
 
     Map<String, dynamic> toJson() => {
+        "nama": nama,
         "nilai": nilai,
         "komentar": komentar,
         "reply": reply,

@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:academeats_mobile/forms/models/review.dart';
+import 'package:academeats_mobile/review/models/review.dart';
 
-class BookPage extends StatefulWidget {
-    const BookPage({Key? key}) : super(key: key);
+class ReviewPage extends StatefulWidget {
+    const ReviewPage({Key? key}) : super(key: key);
 
     @override
-    State<BookPage> createState() => _BookPageState();
+    State<ReviewPage> createState() => _ReviewPageState();
 }
 
-class _BookPageState extends State<BookPage> {
-Future<List<Review>> fetchBook() async {
+class _ReviewPageState extends State<ReviewPage> {
+Future<List<Review>> fetchReview() async {
+    // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
     var url = Uri.parse(
-        'http://localhost:8000/review/show-review-json/<id_makanan>/');
+        'http://localhost:8000/json/');
     var response = await http.get(
         url,
         headers: {"Content-Type": "application/json"},
@@ -22,25 +23,24 @@ Future<List<Review>> fetchBook() async {
     // melakukan decode response menjadi bentuk json
     var data = jsonDecode(utf8.decode(response.bodyBytes));
 
-    // melakukan konversi data json menjadi object Book
-    List<Review> listBook = [];
+    // melakukan konversi data json menjadi object Review
+    List<Review> listReview = [];
     for (var d in data) {
         if (d != null) {
-            listBook.add(Review.fromJson(d));
+            listReview.add(Review.fromJson(d));
         }
     }
-    return listBook;
+    return listReview;
 }
 
 @override
 Widget build(BuildContext context) {
     return Scaffold(
-      // TODO: ganti field title dengan nama makanan
         appBar: AppBar(
-            title: const Text('Review Makanan <nama_makanan>'),
+            title: const Text('Review'),
         ),
         body: FutureBuilder(
-            future: fetchBook(),
+            future: fetchReview(),
             builder: (context, AsyncSnapshot snapshot) {
                 if (snapshot.data == null) {
                     return const Center(child: CircularProgressIndicator());
@@ -49,7 +49,7 @@ Widget build(BuildContext context) {
                         return const Column(
                             children: [
                                 Text(
-                                    "Tidak ada review.",
+                                    "Tidak ada data buku.",
                                     style: TextStyle(
                                         color: Color(0xff59A5D8),
                                         fontSize: 20
@@ -72,16 +72,16 @@ Widget build(BuildContext context) {
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                         Text(
-                                            "${snapshot.data![index].fields.name}",
+                                            "${snapshot.data![index].fields.nama}",
                                             style: const TextStyle(
                                                 fontSize: 18.0,
                                                 fontWeight: FontWeight.bold,
                                             ),
                                         ),
                                         const SizedBox(height: 10),
-                                        Text("${snapshot.data![index].fields.page}"),
+                                        Text("${snapshot.data![index].fields.nilai}"),
                                         const SizedBox(height: 10),
-                                        Text("${snapshot.data![index].fields.description}")
+                                        Text("${snapshot.data![index].fields.komentar}")
                                     ],
                                 ),
                             ),
