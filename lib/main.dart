@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
-import 'package:academeats_mobile/pages/home.dart';
+//import 'package:academeats_mobile/pages/home.dart';
+
+//Ngetes doang, nanti ganti lagi jadi home.dart
+import 'package:academeats_mobile/pages/review/show_review.dart';
+import 'package:academeats_mobile/pages/review/reply_review.dart';
 
 import 'package:academeats_mobile/models/cart.dart';
 
@@ -13,18 +17,23 @@ void main() {
 }
 
 class MainApp extends StatelessWidget {
-  const MainApp({super.key});
+    const MainApp({Key? key}) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        Provider(create: (_) => CookieRequest()),
-        ChangeNotifierProvider(
-            create: (_) => Cart()
-        )
-      ],
-      child: const HomeScreen(),
-    );
-  }
+    @override
+    Widget build(BuildContext context) {
+        return Provider(
+            create: (_) {
+                CookieRequest request = CookieRequest();
+                return request;
+            },
+            child: MaterialApp(
+                title: 'Flutter App',
+                theme: ThemeData(
+                    colorScheme: ColorScheme.fromSeed(seedColor: Colors.indigo),
+                    useMaterial3: true,
+                ),
+                home: const HomeScreen(),
+            ),
+        );
+    }
 }
