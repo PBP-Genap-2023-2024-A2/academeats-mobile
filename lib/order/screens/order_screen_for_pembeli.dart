@@ -1,11 +1,8 @@
 import 'package:academeats_mobile/utils/fetch.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import '../providers/order_provider.dart';
 import '../../models/order_group.dart';
 import '../../models/order.dart';
 
-@override
 class OrderScreenForPembeli extends StatelessWidget {
   final int ogId;
 
@@ -17,27 +14,48 @@ class OrderScreenForPembeli extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Order'),
       ),
-      body: Consumer<OrderProvider>(
-        builder: (context, orderProvider, child) {
-          return FutureBuilder(
-            future: fetchData('order/api/v1/order_group/$ogId'),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator());
-              } else if (snapshot.hasError) {
-                return Center(child: Text('Error: ${snapshot.error}'));
-              } else {
-                final orderGroup = OrderGroup.fromJson(snapshot.data!['data']);
-                return OrderGroupCard(
-                  orderGroup: orderGroup,
-                  onCancel: (og) => orderProvider.cancelOrder(og),
-                );
-              }
-            },
-          );
+      body: FutureBuilder(
+        future: fetchData('order/api/v1/order_group/$ogId'),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else {
+            final orderGroup = OrderGroup.fromJson(snapshot.data!['data']);
+            return OrderGroupCard(
+              orderGroup: orderGroup,
+              onCancel: (og) => cancelOrder(og),
+            );
+          }
         },
       ),
     );
+  }
+
+  Future<void> cancelOrder(OrderGroup og) async {
+    try {
+      final response = await fetchData(
+        'order/update_status_batal',
+        method: RequestMethod.post,
+        body: {
+          'og_id': og.id,
+        },
+      );
+
+      if (response['status'] == 'success') {
+        for (Order order in og.orders) {
+          order.status = "DIBATALKAN";
+        }
+        // Ideally, you'd want to notify the UI of this change.
+        // This would usually involve a state management solution.
+      } else {
+        final errorMessage = response['message'] ?? 'Failed to update order status';
+        throw Exception(errorMessage);
+      }
+    } catch (e) {
+      throw Exception('Failed to update order status: $e');
+    }
   }
 }
 
@@ -114,4 +132,3 @@ class OrderGroupCard extends StatelessWidget {
     );
   }
 }
-

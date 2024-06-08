@@ -1,100 +1,104 @@
-import 'package:academeats_mobile/utils/fetch.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
-
 import '../../models/order.dart';
 import '../../models/order_group.dart';
+import '../../utils/fetch.dart';
 
 class OrderProvider with ChangeNotifier {
   List<Order> _orders = [];
   List<OrderGroup> _orderGroups = [];
+  bool _isFetching = false;
 
   List<Order> get orders => _orders;
   List<OrderGroup> get orderGroups => _orderGroups;
+  bool get isFetching => _isFetching;
 
-  /*Future<void> fetchOrdersPenjual() async {
-    final response = await http.get(Uri.parse('http://127.0.0.1:8000/order/api/v1/1/orders'));
+  Future<void> fetchOrders(int tokoId) async {
+    if (_isFetching) return;
 
-    if (response.statusCode == 200) {
-      List<dynamic> jsonResponse = json.decode(response.body);
-      _orders = jsonResponse
-          .map<Order>((json) => Order.fromJson(json as Map<String, dynamic>))
-          .toList();
+    _isFetching = true;
+    notifyListeners();
+
+    try {
+      final response = await fetchData('order/api/v1/$tokoId/orders');
+      if (response != null && response['data'] != null) {
+        _orders = (response['data'] as List).map((orderData) => Order.fromJson(orderData)).toList();
+      } else {
+        throw Exception('Failed to load orders');
+      }
+    } catch (e) {
+      throw Exception('Failed to fetch orders: $e');
+    } finally {
+      _isFetching = false;
       notifyListeners();
-    } else {
-      throw Exception('Failed to load orders');
-    }
-  }*/
-
-  Future<void> fetchOrdersPembeli(String tokoId) async {
-    final response =
-    await http.get(Uri.parse('http://127.0.0.1:8000/order/api/v1/order_group/'));
-    if (response.statusCode == 200) {
-      List<dynamic> jsonResponse = json.decode(response.body)['order_groups'];
-      _orderGroups = jsonResponse
-          .map((orderGroup) => OrderGroup.fromJson(orderGroup))
-          .toList();
-      notifyListeners();
-    } else {
-      throw Exception('Failed to load orders');
     }
   }
 
-/*  Future<void> updateOrderStatus(int pk, String newStatus) async {
+  Future<void> fetchOrderGroups(int ogId) async {
+    if (_isFetching) return;
+
+    _isFetching = true;
+    notifyListeners();
+
     try {
-      // Fetch the data and handle the response
+      final response = await fetchData('order/api/v1/order_group/$ogId');
+      if (response != null && response['data'] != null) {
+        _orders = (response['data'] as List).map((orderData) => Order.fromJson(orderData)).toList();
+      } else {
+        throw Exception('Failed to load orders');
+      }
+    } catch (e) {
+      throw Exception('Failed to fetch orders: $e');
+    } finally {
+      _isFetching = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> updateOrderStatus(String newStatus, Order order) async {
+    try {
       final response = await fetchData(
-        'order/update_status_penjual',
+        'order/edit_status_penjual/',
         method: RequestMethod.post,
         body: {
-          'order_id': pk.toString(),
+          'order_id': order.id,
           'order_status': newStatus,
         },
       );
 
-      // Check the response for success status
       if (response['status'] == 'success') {
-        final order = _orders.firstWhere((order) => order.id == pk);
         order.status = newStatus;
         notifyListeners();
       } else {
-        // Handle specific error messages if available
         final errorMessage = response['message'] ?? 'Failed to update order status';
         throw Exception(errorMessage);
       }
     } catch (e) {
-      // Handle errors such as network issues
-      throw Exception('Failed to update order status: $e');
-    }
-  }*/
-
-  Future<void> cancelOrder(OrderGroup og) async {
-    try {
-      final response = await fetchData('order/update_status_batal',
-      method: RequestMethod.post,
-        body: {
-        'og_id': og.id
-        }
-      );
-
-      if (response['status'] == 'success') {
-        final orderGroup = _orderGroups.firstWhere((orderGroups) => orderGroups.id == og.id);
-        for (Order order in orders) {
-          order.status = "DIBATALKAN";
-          notifyListeners();
-        }
-      }
-      else {
-        final errorMessage = response['message'] ?? 'Failed to update order status';
-        throw Exception(errorMessage);
-      }
-    }
-    catch (e) {
       throw Exception('Failed to update order status: $e');
     }
   }
 
+  Future<void> cancelOrder(OrderGroup og) async {
+    try {
+      final response = await fetchData(
+        'order/edit_status_batal/$og.id',
+        method: RequestMethod.post,
+        body: {
+          'og_id': og.id,
+        },
+      );
 
-
+      if (response['status'] == 'success') {
+        List<Order> orders = og.orders;
+        for (Order order in orders) {
+          order.status = 'DIBATALKAN';
+        }
+        notifyListeners();
+      } else {
+        final errorMessage = response['message'] ?? 'Failed to update order status';
+        throw Exception(errorMessage);
+      }
+    } catch (e) {
+      throw Exception('Failed to update order status: $e');
+    }
+  }
 }
