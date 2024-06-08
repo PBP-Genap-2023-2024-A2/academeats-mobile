@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:academeats_mobile/models/base_model.dart';
 import 'package:academeats_mobile/models/user.dart';
 import 'package:http/http.dart' as http;
 import 'package:academeats_mobile/assets/constants.dart' as Constant;
