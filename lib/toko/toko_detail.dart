@@ -1,23 +1,43 @@
 import 'package:flutter/material.dart';
 import '../makanan/detail_makanan.dart';
-import '../models/makanan.dart'; // Adjust the import path accordingly
-import 'package:academeats_mobile/utils/fetch.dart';
+import '../makanan/tambah_makanan.dart';
+import '../models/makanan.dart';
 import '../models/toko.dart';
+import '../utils/fetch.dart';
 
-class TokoDetailScreen extends StatelessWidget {
-  final Toko toko; // Define a property to hold the Toko object
+class TokoDetailScreen extends StatefulWidget {
+  final Toko toko;
 
   TokoDetailScreen({required this.toko, Key? key}) : super(key: key);
+
+  @override
+  _TokoDetailScreenState createState() => _TokoDetailScreenState();
+}
+
+class _TokoDetailScreenState extends State<TokoDetailScreen> {
+  late Future<Map<String, dynamic>> _makananFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _makananFuture = fetchData('makanan/api/v1/toko/${widget.toko.id}/');
+  }
+
+  void _refreshMakananList() {
+    setState(() {
+      _makananFuture = fetchData('makanan/api/v1/toko/${widget.toko.id}/');
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(toko.name), // Display the toko's name as the title
-        backgroundColor: const Color(0xFFF6E049), // Primary color
+        title: Text(widget.toko.name),
+        backgroundColor: const Color(0xFFF6E049),
       ),
       body: FutureBuilder<Map<String, dynamic>>(
-        future: fetchData('makanan/api/v1/toko/${toko.id}/'),
+        future: _makananFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
@@ -44,15 +64,14 @@ class TokoDetailScreen extends StatelessWidget {
                         color: Colors.grey[300],
                         borderRadius: BorderRadius.circular(10),
                         image: const DecorationImage(
-                          image: NetworkImage(
-                              'https://via.placeholder.com/150'),
+                          image: NetworkImage('https://via.placeholder.com/150'),
                           fit: BoxFit.cover,
                         ),
                       ),
                     ),
                     const SizedBox(height: 20),
                     Text(
-                      toko.name,
+                      widget.toko.name,
                       style: Theme.of(context).textTheme.headline5?.copyWith(
                         color: const Color(0xFF625A1D),
                         fontWeight: FontWeight.bold,
@@ -60,25 +79,39 @@ class TokoDetailScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 10),
                     Text(
-                      'Owner: ${toko.user.namaLengkap}',
+                      'Owner: ${widget.toko.user.namaLengkap}',
                       style: Theme.of(context).textTheme.subtitle1?.copyWith(
                         color: const Color(0xFF383A48),
                       ),
                     ),
                     const SizedBox(height: 10),
                     Text(
-                      'Deskripsi: ${toko.description}',
+                      'Deskripsi: ${widget.toko.description}',
                       style: Theme.of(context).textTheme.subtitle1?.copyWith(
                         color: const Color(0xFF383A48),
                       ),
                     ),
                     const SizedBox(height: 20),
-                    const Divider(color: Color(0xFFE0719E)), // Pink divider
+                    ElevatedButton(
+                      onPressed: () async {
+                        final newMakanan = await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => TambahMakananPage(toko: widget.toko),
+                          ),
+                        );
+                        if (newMakanan != null) {
+                          _refreshMakananList();
+                        }
+                      },
+                      child: Text('Tambah Makanan'),
+                    ),
+                    const Divider(color: Color(0xFFE0719E)),
                     const SizedBox(height: 10),
                     Text(
                       'Available Makanan',
                       style: Theme.of(context).textTheme.headline6?.copyWith(
-                        color: const Color(0xFFE0719E), // Pink text color
+                        color: const Color(0xFFE0719E),
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -105,7 +138,7 @@ class TokoDetailScreen extends StatelessWidget {
                               color: const Color(0xFFFDF9DB),
                               borderRadius: BorderRadius.circular(10),
                               border: Border.all(
-                                color: const Color(0xFFE0719E), // Pink border
+                                color: const Color(0xFFE0719E),
                               ),
                               boxShadow: [
                                 BoxShadow(
@@ -145,6 +178,7 @@ class TokoDetailScreen extends StatelessWidget {
                         );
                       },
                     ),
+                    const SizedBox(height: 20),
                   ],
                 ),
               ),
@@ -152,7 +186,7 @@ class TokoDetailScreen extends StatelessWidget {
           }
         },
       ),
-      backgroundColor: const Color(0xFFF3F6E6), // Body background color
+      backgroundColor: const Color(0xFFF3F6E6),
     );
   }
 }

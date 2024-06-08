@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
+import '../models/makanan.dart';
+import '../models/toko.dart';
 
-class EditMakananPage extends StatefulWidget {
+class TambahMakananPage extends StatefulWidget {
+  final Toko toko;
+
+  TambahMakananPage({required this.toko, Key? key}) : super(key: key);
+
   @override
-  _EditMakananPageState createState() => _EditMakananPageState();
+  _TambahMakananPageState createState() => _TambahMakananPageState();
 }
 
-class _EditMakananPageState extends State<EditMakananPage> {
+class _TambahMakananPageState extends State<TambahMakananPage> {
   final _formKey = GlobalKey<FormState>();
   final _namaController = TextEditingController();
   final _hargaController = TextEditingController();
@@ -21,10 +27,15 @@ class _EditMakananPageState extends State<EditMakananPage> {
 
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
-      // Perform the form submission logic
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Makanan berhasil di edit')),
+      final newMakanan = Makanan(
+        id: 0, // This should be set by your backend
+        nama: _namaController.text,
+        harga: double.parse(_hargaController.text),
+        stok: int.parse(_stokController.text),
+        imgUrl: 'https://via.placeholder.com/150', // Example placeholder image
+        toko: widget.toko,
       );
+      Navigator.pop(context, newMakanan);
     }
   }
 
@@ -32,7 +43,8 @@ class _EditMakananPageState extends State<EditMakananPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Edit Makanan'),
+        title: Text('Tambah Makanan'),
+        backgroundColor: const Color(0xFFF6E049), // Primary color
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -42,8 +54,11 @@ class _EditMakananPageState extends State<EditMakananPage> {
             children: [
               SizedBox(height: 20),
               Text(
-                'Edit Makanan',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                'Tambah Makanan',
+                style: Theme.of(context).textTheme.headline5?.copyWith(
+                  color: const Color(0xFFE0719E), // Pink text color
+                  fontWeight: FontWeight.bold,
+                ),
                 textAlign: TextAlign.center,
               ),
               SizedBox(height: 20),
@@ -53,7 +68,7 @@ class _EditMakananPageState extends State<EditMakananPage> {
                   labelText: 'Nama Makanan',
                   border: OutlineInputBorder(),
                   filled: true,
-                  fillColor: Colors.grey[200],
+                  fillColor: const Color(0xFFFDF9DB),
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -69,7 +84,7 @@ class _EditMakananPageState extends State<EditMakananPage> {
                   labelText: 'Harga',
                   border: OutlineInputBorder(),
                   filled: true,
-                  fillColor: Colors.grey[200],
+                  fillColor: const Color(0xFFFDF9DB),
                 ),
                 keyboardType: TextInputType.number,
                 validator: (value) {
@@ -86,7 +101,7 @@ class _EditMakananPageState extends State<EditMakananPage> {
                   labelText: 'Stok',
                   border: OutlineInputBorder(),
                   filled: true,
-                  fillColor: Colors.grey[200],
+                  fillColor: const Color(0xFFFDF9DB),
                 ),
                 keyboardType: TextInputType.number,
                 validator: (value) {
@@ -101,9 +116,10 @@ class _EditMakananPageState extends State<EditMakananPage> {
                 onPressed: _submitForm,
                 child: Padding(
                   padding: EdgeInsets.symmetric(vertical: 15, horizontal: 50),
-                  child: Text('Edit Makanan', style: TextStyle(fontSize: 18)),
+                  child: Text('Tambah Makanan', style: TextStyle(fontSize: 18)),
                 ),
                 style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFFE0719E), // Pink button color
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
                 ),
               ),
