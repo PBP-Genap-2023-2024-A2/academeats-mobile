@@ -26,11 +26,18 @@ class ReviewPage extends StatefulWidget {
 
 class _ReviewPageState extends State<ReviewPage> {
   late Future<List<Review?>> futureReviews;
+  int _selectedIndex = 0;
 
   @override
   void initState() {
     super.initState();
     futureReviews = fetchReviews();
+  }
+
+  void _onItemTapped(int index) {
+        setState(() {
+          _selectedIndex = index;
+        });
   }
 
   Future<List<Review?>> fetchReviews() async {
@@ -58,6 +65,24 @@ class _ReviewPageState extends State<ReviewPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Reviews'),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.store),
+            label: 'Toko',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.receipt_long_outlined),
+            label: 'Orders',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person_rounded),
+            label: 'Profile',
+          ),
+        ],
+        currentIndex: _selectedIndex, //New
+        onTap: _onItemTapped, 
       ),
       body: FutureBuilder<List<Review?>>(
         future: futureReviews,
@@ -108,5 +133,6 @@ class _ReviewPageState extends State<ReviewPage> {
         },
       ),
     );
+    
   }
 }
