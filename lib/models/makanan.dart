@@ -1,4 +1,3 @@
-import 'package:academeats_mobile/models/base_model.dart';
 import 'package:academeats_mobile/models/toko.dart';
 
 class Makanan implements ISendable {
