@@ -1,37 +1,52 @@
-import 'package:academeats_mobile/pages/landing_page/home.dart';
+<<<<<<< HEAD
+import 'package:academeats_mobile/pages/home.dart';
+=======
+import 'package:academeats_mobile/auth/auth.dart';
+>>>>>>> 378ce0f1c344949c397035370aaab5cd92dab1d7
 import 'package:flutter/material.dart';
-import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
+<<<<<<< HEAD
 import 'package:academeats_mobile/pages/user/login.dart';
 
 //Ngetes doang, nanti ganti lagi jadi home.dart
+=======
+import 'package:academeats_mobile/pages/home.dart';
+
+>>>>>>> 378ce0f1c344949c397035370aaab5cd92dab1d7
 import 'package:academeats_mobile/models/cart.dart';
 
 void main() {
-  runApp(const MaterialApp(
-    title: 'AcademEats',
-    home: MainApp(),
-  ));
+  runApp(const MainApp());
 }
 
 class MainApp extends StatelessWidget {
-    const MainApp({Key? key}) : super(key: key);
+  const MainApp({super.key});
 
-    @override
-    Widget build(BuildContext context) {
-        return Provider(
-            create: (_) {
-                CookieRequest request = CookieRequest();
-                return request;
-            },
-            child: MaterialApp(
-                title: 'Flutter App',
-                theme: ThemeData(
-                    colorScheme: ColorScheme.fromSeed(seedColor: Colors.indigo),
-                    useMaterial3: true,
-                ),
-                home: const LandingPage(),
-            ),
-        );
-    }
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'AcademEats',
+      theme: ThemeData(
+        colorScheme: const ColorScheme(
+            primary: Color.fromRGBO(246, 224, 73, 1),
+            secondary: Color.fromRGBO(224, 113, 158, 1),
+            surface: Colors.white60,
+            background: Colors.white,
+            brightness: Brightness.light,
+            error: Color.fromRGBO(220, 53, 69, 1),
+            onBackground: Colors.black87,
+            onPrimary: Colors.black87,
+            onSecondary: Colors.white70,
+            onError: Colors.white,
+            onSurface: Colors.black87),
+      ),
+      home: MultiProvider(
+        providers: [
+          Provider(create: (_) => AuthProvider()),
+          ChangeNotifierProvider(create: (_) => CartProvider()),
+        ],
+        child: const HomeScreen(),
+      ),
+    );
+  }
 }

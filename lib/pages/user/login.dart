@@ -1,5 +1,5 @@
 import 'package:academeats_mobile/models/user.dart';
-import 'package:academeats_mobile/pages/landing_page/home.dart';
+import 'package:academeats_mobile/pages/home.dart';
 import 'package:flutter/material.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
