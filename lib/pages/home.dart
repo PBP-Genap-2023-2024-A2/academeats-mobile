@@ -64,7 +64,7 @@ class MainScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.,
+      padding: EdgeInsets.all(8.0),
       child: SingleChildScrollView(
         child: Column(
           children: [
