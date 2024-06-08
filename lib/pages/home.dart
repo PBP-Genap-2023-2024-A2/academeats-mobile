@@ -1,51 +1,78 @@
-import 'package:academeats_mobile/utils/fetch.dart';
+import 'package:academeats_mobile/auth/auth.dart';
 import 'package:flutter/material.dart';
+import 'package:pbp_django_auth/pbp_django_auth.dart';
+import 'package:provider/provider.dart';
 
-class HomeScreen extends StatelessWidget {
+import 'package:academeats_mobile/models/cart.dart';
+import 'package:academeats_mobile/models/user.dart';
+
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return const TestWidget();
-  }
+  State<StatefulWidget> createState() => _HomeScreenState();
 }
 
-class TestWidget extends StatefulWidget {
-  const TestWidget({super.key});
+class _HomeScreenState extends State<HomeScreen> {
+
+  int _currentPageIndex = 0;
+
+  final List<Widget> _pageList = <Widget>[
+    const MainScreen(),
+
+  ];
 
   @override
-  State<StatefulWidget> createState() => _TestWidgetState();
-}
+  void initState() {
+    super.initState();
 
-class _TestWidgetState extends State<TestWidget> {
-  final TextEditingController _unameController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
+    User? user = Provider
+        .of<AuthProvider>(context, listen: false)
+        .user;
+
+    // Get initial state for cart and user
+    if (user != null) {
+      Provider
+          .of<CartProvider>(context, listen: false)
+          .fetchCart(user);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-          padding: const EdgeInsets.all(8.0),
-          child: FutureBuilder(
-            future: fetchData('toko/api/v1/'),
-            builder: (context, snapshot) {
-              if (snapshot.data == null) {
-                return const CircularProgressIndicator();
-              } else {
-                return ListView.builder(
-                  itemCount: snapshot.data!.length,
-                  itemBuilder: (_, index) => Container(
-                      margin: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 12
-                      ),
-                      padding: const EdgeInsets.all(20.0),
-                      child: Text('${snapshot.data!['data'][index]}')
-                  ),
-                );
-              }
-            },
-          )),
+      appBar: AppBar(),
+      bottomNavigationBar: NavigationBar(
+        selectedIndex: _currentPageIndex,
+        onDestinationSelected: (index) {
+          setState(() {
+            _currentPageIndex = index;
+          });
+        },
+        destinations: const [
+          NavigationDestination(icon: Icon(Icons.home_filled), label: "Home",)
+        ],
+      ),
+      body: _pageList[_currentPageIndex],
     );
   }
+}
+
+class MainScreen extends StatelessWidget {
+  const MainScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.,
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+
+          ],
+        ),
+      ),
+    );
+  }
+
 }
