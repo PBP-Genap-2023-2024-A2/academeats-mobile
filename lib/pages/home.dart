@@ -1,6 +1,5 @@
 import 'package:academeats_mobile/auth/auth.dart';
 import 'package:flutter/material.dart';
-import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
 
 import 'package:academeats_mobile/models/cart.dart';
@@ -50,7 +49,8 @@ class _HomeScreenState extends State<HomeScreen> {
           });
         },
         destinations: const [
-          NavigationDestination(icon: Icon(Icons.home_filled), label: "Home",)
+          NavigationDestination(icon: Icon(Icons.home_filled), label: "Home",),
+          NavigationDestination(icon: Icon(Icons.person_rounded), label: "Profile")
         ],
       ),
       body: _pageList[_currentPageIndex],
@@ -59,6 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
 }
 
 class MainScreen extends StatelessWidget {
+
   const MainScreen({super.key});
 
   @override
@@ -74,5 +75,5 @@ class MainScreen extends StatelessWidget {
       ),
     );
   }
-
 }
+
