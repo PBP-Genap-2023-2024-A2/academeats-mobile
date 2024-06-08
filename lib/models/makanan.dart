@@ -1,6 +1,6 @@
 import 'package:academeats_mobile/models/toko.dart';
 
-class Makanan {
+class Makanan implements ISendable {
   int id;
   String nama;
   double harga;
@@ -25,8 +25,7 @@ class Makanan {
     imgUrl: json['img_url'],
     toko: Toko.fromJson(json['toko']),
   );
-
-
+  
   Map<String, dynamic> toJson() => {
     'id': id,
     'nama': nama,

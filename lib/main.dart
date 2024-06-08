@@ -1,15 +1,12 @@
+import 'package:academeats_mobile/auth/auth.dart';
 import 'package:flutter/material.dart';
-import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
-import 'package:academeats_mobile/toko/home.dart';
+import 'package:academeats_mobile/pages/home.dart';
 
 import 'package:academeats_mobile/models/cart.dart';
 
 void main() {
-  runApp(const MaterialApp(
-    title: 'AcademEats',
-    home: MainApp(),
-  ));
+  runApp(const MainApp());
 }
 
 class MainApp extends StatelessWidget {
@@ -17,14 +14,29 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        Provider(create: (_) => CookieRequest()),
-        ChangeNotifierProvider(
-            create: (_) => Cart()
-        )
-      ],
-      child: const HomeScreen(),
+    return MaterialApp(
+      title: 'AcademEats',
+      theme: ThemeData(
+        colorScheme: const ColorScheme(
+            primary: Color.fromRGBO(246, 224, 73, 1),
+            secondary: Color.fromRGBO(224, 113, 158, 1),
+            surface: Colors.white60,
+            background: Colors.white,
+            brightness: Brightness.light,
+            error: Color.fromRGBO(220, 53, 69, 1),
+            onBackground: Colors.black87,
+            onPrimary: Colors.black87,
+            onSecondary: Colors.white70,
+            onError: Colors.white,
+            onSurface: Colors.black87),
+      ),
+      home: MultiProvider(
+        providers: [
+          Provider(create: (_) => AuthProvider()),
+          ChangeNotifierProvider(create: (_) => CartProvider()),
+        ],
+        child: const HomeScreen(),
+      ),
     );
   }
-              }
+}
