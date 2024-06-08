@@ -1,3 +1,4 @@
+import 'package:academeats_mobile/auth/auth.dart';
 import 'package:academeats_mobile/models/user.dart';
 import 'package:academeats_mobile/pages/home.dart';
 import 'package:flutter/material.dart';
@@ -70,8 +71,9 @@ class _LoginPageState extends State<LoginPage> {
                                 if (request.loggedIn) {
                                     String message = response['message'];
                                     String uname = response['username'];
-                                    User user = context.watch<AuthProvider>().user;
+                                    User? user = context.watch<AuthProvider>().user;
                                     if (context.mounted) {
+                                        if(user != null && user.role == ""
                                         Navigator.pushReplacement(
                                             context,
                                             MaterialPageRoute(builder: (context) => const LandingPage()),
