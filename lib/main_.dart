@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../order/providers/order_provider.dart';
-import '../order/models/order_group.dart';
-import '../order/models/order.dart';
+import '../../models/order_group.dart';
+import '../../models/order.dart';
 import '../order/screens/order_screen.dart';
 import '../order/screens/home_screen.dart';
 

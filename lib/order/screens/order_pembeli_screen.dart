@@ -1,34 +1,54 @@
+import 'package:academeats_mobile/utils/fetch.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/order_provider.dart';
-import '../models/order_group.dart';
-import '../models/order.dart';
+import '../../models/order_group.dart';
+import '../../models/order.dart';
 
-class OrderPembeliScreen extends StatelessWidget {
-  const OrderPembeliScreen({super.key, required this.orderGroup});
-  final List<OrderGroup> orderGroup;
+@override
+class OrderScreenForPembeli extends StatelessWidget {
+  final int ogId;
+
+  OrderScreenForPembeli(this.ogId, {super.key});
 
   @override
   Widget build(BuildContext context) {
-    print('OrderGroup data: $orderGroup');
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Order List'),
+        title: const Text('Order'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: ListView.builder(
-          itemCount: orderGroup.length,
-          itemBuilder: (context, index) {
-            final og = orderGroup[index];
-            return _buildOrderGroupCard(og, context);
-          },
-        ),
+      body: Consumer<OrderProvider>(
+        builder: (context, orderProvider, child) {
+          return FutureBuilder(
+            future: fetchData('order/api/v1/order_group/$ogId'),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              } else if (snapshot.hasError) {
+                return Center(child: Text('Error: ${snapshot.error}'));
+              } else {
+                final orderGroup = OrderGroup.fromJson(snapshot.data!['data']);
+                return OrderGroupCard(
+                  orderGroup: orderGroup,
+                  onCancel: (og) => orderProvider.cancelOrder(og),
+                );
+              }
+            },
+          );
+        },
       ),
     );
   }
+}
 
-  Widget _buildOrderGroupCard(OrderGroup og, BuildContext context) {
+class OrderGroupCard extends StatelessWidget {
+  final OrderGroup orderGroup;
+  final Future<void> Function(OrderGroup) onCancel;
+
+  OrderGroupCard({required this.orderGroup, required this.onCancel});
+
+  @override
+  Widget build(BuildContext context) {
     return Card(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -38,17 +58,17 @@ class OrderPembeliScreen extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('Order ID: ${og.pk}'),
-                Text('Total: Rp${og.totalHarga}'),
+                Text('Order ID: ${orderGroup.id}'),
+                Text('Total: Rp${orderGroup.totalHarga}'),
               ],
             ),
           ),
           ListView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            itemCount: og.orders.length,
+            itemCount: orderGroup.orders.length,
             itemBuilder: (context, index) {
-              final order = og.orders[index];
+              final order = orderGroup.orders[index];
               return _buildOrderCard(order);
             },
           ),
@@ -62,12 +82,12 @@ class OrderPembeliScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     const Text('Status Pesanan:'),
-                    Text(og.status),
+                    Text(orderGroup.status),
                   ],
                 ),
                 ElevatedButton(
-                  onPressed: () {
-                    Provider.of<OrderProvider>(context, listen: false).cancelOrder(og.pk);
+                  onPressed: () async {
+                    await onCancel(orderGroup);
                   },
                   child: const Text('Batalkan Pesanan'),
                 ),
@@ -94,3 +114,4 @@ class OrderPembeliScreen extends StatelessWidget {
     );
   }
 }
+

@@ -16,7 +16,7 @@ class User {
   });
 
   factory User.fromJson(Map<String, dynamic> json) => User(
-    id: json["id"],
+    id: json["id"] ?? 0,
     username: json["username"],
     namaLengkap: json["nama_lengkap"],
     namaPanggilan: json["nama_panggilan"],
@@ -32,4 +32,5 @@ class User {
     "bio": bio,
     // "date_added": "${tanggalBergabung.year.toString().padLeft(4, '0')}-${tanggalBergabung.month.toString().padLeft(2, '0')}-${tanggalBergabung.day.toString().padLeft(2, '0')}",
   };
+
 }

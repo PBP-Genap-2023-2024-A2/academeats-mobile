@@ -19,10 +19,10 @@ class Makanan implements ISendable {
   });
 
   factory Makanan.fromJson(Map<String, dynamic> json) => Makanan(
-    pk: json['pk'],
+    pk: json['pk'] ?? 0,
     nama: json['nama'],
     harga: json['harga'],
-    stok: json['stok'],
+    stok: json['stok'] ?? 0,
     imgUrl: json['img_url'],
     toko: Toko.fromJson(json['toko']),
   );
