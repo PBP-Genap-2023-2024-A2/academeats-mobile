@@ -43,7 +43,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     final List<Widget> _pageList = <Widget>[
       const MainMakananScreen(),
       const ForumHomePage(),
@@ -52,7 +51,9 @@ class _HomeScreenState extends State<HomeScreen> {
     ];
 
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+
+      ),
       bottomNavigationBar: NavigationBar(
         selectedIndex: _currentPageIndex,
         onDestinationSelected: (index) {
