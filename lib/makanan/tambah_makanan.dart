@@ -32,14 +32,14 @@ class _TambahMakananPageState extends State<TambahMakananPage> {
 
       try {
         final jsonData = newMakanan.toJson();
-        print('Sending data to the server: $jsonData'); // Debugging output
+
 
         final response = await postData(
           'makanan/api/v1/toko/${widget.toko.id}/add',
           jsonData,
         );
 
-        print('Server response: $response'); // Debugging output
+
 
         if (response['success'] == true) {
           Navigator.pop(context, newMakanan);

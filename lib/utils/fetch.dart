@@ -108,3 +108,28 @@ Future<Map<String, dynamic>> postData(String path, Map<String, dynamic> body, {U
     user: user,
   );
 }
+
+Future<Map<String, dynamic>> deleteData(String path) async {
+  final Uri uri = Uri.parse(Constant.BACKEND_URI_LOCAL + path);
+
+  try {
+    final response = await http.delete(
+      uri,
+      headers: {
+        'Content-Type': 'application/json', // Adjust the content type as needed
+        // Add any additional headers if required
+      },
+    );
+
+    if (response.statusCode == 200) {
+      // If the request is successful, return the decoded response body
+      return json.decode(response.body);
+    } else {
+      // If the request fails, throw an error with the response status code
+      throw Exception('Failed to delete data: ${response.statusCode}');
+    }
+  } catch (e) {
+    // Catch any exceptions that occur during the HTTP request
+    throw Exception('Failed to delete data: $e');
+  }
+}

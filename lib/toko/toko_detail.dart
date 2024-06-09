@@ -29,6 +29,34 @@ class _TokoDetailScreenState extends State<TokoDetailScreen> {
     });
   }
 
+  Future<void> _deleteMakanan(int makananId) async {
+    // Send a delete request to the backend to delete the makanan
+    final response = await deleteData('makanan/api/v1/delete/$makananId/');
+    if (response['success']) {
+      // If deletion is successful, refresh the makanan list
+      _refreshMakananList();
+    } else {
+      // If deletion fails, show an error message
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('Error'),
+            content: Text(response['message']),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -64,7 +92,8 @@ class _TokoDetailScreenState extends State<TokoDetailScreen> {
                         color: Colors.grey[300],
                         borderRadius: BorderRadius.circular(10),
                         image: const DecorationImage(
-                          image: NetworkImage('https://via.placeholder.com/150'),
+                          image:
+                              NetworkImage('https://via.placeholder.com/150'),
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -73,23 +102,23 @@ class _TokoDetailScreenState extends State<TokoDetailScreen> {
                     Text(
                       widget.toko.name,
                       style: Theme.of(context).textTheme.headline5?.copyWith(
-                        color: const Color(0xFF625A1D),
-                        fontWeight: FontWeight.bold,
-                      ),
+                            color: const Color(0xFF625A1D),
+                            fontWeight: FontWeight.bold,
+                          ),
                     ),
                     const SizedBox(height: 10),
                     Text(
                       'Owner: ${widget.toko.user.namaLengkap}',
                       style: Theme.of(context).textTheme.subtitle1?.copyWith(
-                        color: const Color(0xFF383A48),
-                      ),
+                            color: const Color(0xFF383A48),
+                          ),
                     ),
                     const SizedBox(height: 10),
                     Text(
                       'Deskripsi: ${widget.toko.description}',
                       style: Theme.of(context).textTheme.subtitle1?.copyWith(
-                        color: const Color(0xFF383A48),
-                      ),
+                            color: const Color(0xFF383A48),
+                          ),
                     ),
                     const SizedBox(height: 20),
                     ElevatedButton(
@@ -97,7 +126,8 @@ class _TokoDetailScreenState extends State<TokoDetailScreen> {
                         final newMakanan = await Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => TambahMakananPage(toko: widget.toko),
+                            builder: (context) =>
+                                TambahMakananPage(toko: widget.toko),
                           ),
                         );
                         if (newMakanan != null) {
@@ -111,9 +141,9 @@ class _TokoDetailScreenState extends State<TokoDetailScreen> {
                     Text(
                       'Available Makanan',
                       style: Theme.of(context).textTheme.headline6?.copyWith(
-                        color: const Color(0xFFE0719E),
-                        fontWeight: FontWeight.bold,
-                      ),
+                            color: const Color(0xFFE0719E),
+                            fontWeight: FontWeight.bold,
+                          ),
                     ),
                     const SizedBox(height: 10),
                     ListView.builder(
@@ -122,57 +152,124 @@ class _TokoDetailScreenState extends State<TokoDetailScreen> {
                       itemCount: data['data'].length,
                       itemBuilder: (context, index) {
                         Makanan makanan = Makanan.fromJson(data['data'][index]);
-                        return GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => FoodDetailScreen(makanan: makanan),
-                              ),
-                            );
-                          },
-                          child: Container(
-                            margin: const EdgeInsets.symmetric(vertical: 8.0),
-                            padding: const EdgeInsets.all(16.0),
-                            decoration: BoxDecoration(
-                              color: const Color(0xFFFDF9DB),
-                              borderRadius: BorderRadius.circular(10),
-                              border: Border.all(
-                                color: const Color(0xFFE0719E),
-                              ),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black12,
-                                  blurRadius: 4,
-                                  offset: const Offset(2, 2),
-                                ),
-                              ],
+                        return Container(
+                          width: double.infinity,
+                          margin: const EdgeInsets.symmetric(vertical: 8.0),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFFDF9DB),
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(
+                              color: const Color(0xFFE0719E),
                             ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  makanan.nama,
-                                  style: Theme.of(context).textTheme.subtitle1?.copyWith(
-                                    color: const Color(0xFF383A48),
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black12,
+                                blurRadius: 4,
+                                offset: const Offset(2, 2),
+                              ),
+                            ],
+                          ),
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      FoodDetailScreen(makanan: makanan),
                                 ),
-                                const SizedBox(height: 5),
-                                Text(
-                                  'Harga: ${makanan.harga}',
-                                  style: Theme.of(context).textTheme.bodyText1?.copyWith(
-                                    color: const Color(0xFF383A48),
-                                  ),
+                              );
+                            },
+                            child: Dismissible(
+                              key: Key(makanan.id.toString()),
+                              background: Container(
+                                color: Colors.pink,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                        'Detail',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                                const SizedBox(height: 5),
-                                Text(
-                                  'Stok: ${makanan.stok}',
-                                  style: Theme.of(context).textTheme.bodyText1?.copyWith(
-                                    color: const Color(0xFF383A48),
-                                  ),
+                              ),
+                              secondaryBackground: Container(
+                                color: Colors.red,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                        'Delete',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ],
+                              ),
+                              onDismissed: (direction) {
+                                if (direction == DismissDirection.endToStart) {
+                                  _deleteMakanan(makanan.id);
+                                } else {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          FoodDetailScreen(makanan: makanan),
+                                    ),
+                                  );
+                                }
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      makanan.nama,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .subtitle1
+                                          ?.copyWith(
+                                            color: const Color(0xFF383A48),
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                    ),
+                                    const SizedBox(height: 5),
+                                    Text(
+                                      'Harga: ${makanan.harga}',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyText1
+                                          ?.copyWith(
+                                            color: const Color(0xFF383A48),
+                                          ),
+                                    ),
+                                    const SizedBox(height: 5),
+                                    Text(
+                                      'Stok: ${makanan.stok}',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyText1
+                                          ?.copyWith(
+                                            color: const Color(0xFF383A48),
+                                          ),
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
                           ),
                         );
