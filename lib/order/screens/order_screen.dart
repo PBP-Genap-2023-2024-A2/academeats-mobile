@@ -1,22 +1,25 @@
+import 'package:academeats_mobile/auth/auth.dart';
 import 'package:academeats_mobile/order/screens/toko_screen_for_penjual.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'order_screen_for_penjual.dart';
 import 'order_screen_for_pembeli.dart';
 
 class OrderScreen extends StatelessWidget {
-  final String userRole;
-
-  const OrderScreen({Key? key, required this.userRole}) : super(key: key);
+  const OrderScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final user = context.watch<AuthProvider>().user;
+
+    String userRole = user?.role ?? "";
+
     print('OrderScreen userRole: $userRole'); // Debug statement
-    if (userRole == 'Penjual') {
+    if (userRole == 'penjual') {
       // TODO: get the actual tokoId
       final int tokoId = 1;
       return TokoScreenForPenjual();
-      //return OrderScreenForPenjual(tokoId);
-    } else if (userRole == 'Pembeli') {
+    } else if (userRole == 'pembeli') {
       // TODO: get the actual ogId
       final int ogId = 1;
       return OrderScreenForPembeli();

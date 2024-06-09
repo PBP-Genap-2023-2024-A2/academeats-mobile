@@ -2,32 +2,10 @@ import 'package:academeats_mobile/auth/auth.dart';
 import 'package:academeats_mobile/models/cart.dart';
 import 'package:academeats_mobile/models/user.dart';
 import 'package:academeats_mobile/pages/home.dart';
-import 'package:academeats_mobile/pages/landing_page/pembeli.dart';
-import 'package:academeats_mobile/pages/landing_page/penjual.dart';
 import 'package:flutter/material.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
 
-class LoginApp extends StatelessWidget {
-    const LoginApp({super.key});
-
-    @override
-    Widget build(BuildContext context) {
-        return MaterialApp(
-            title: 'Login',
-            theme: ThemeData(
-                primarySwatch: Colors.blue,
-            ),
-            home: MultiProvider(
-        providers: [
-          Provider(create: (_) => AuthProvider()),
-          ChangeNotifierProvider(create: (_) => CartProvider()),
-        ],
-        child: const LoginPage(),
-      ),
-        );
-    }
-}
 
 class LoginPage extends StatefulWidget {
     const LoginPage({super.key});
@@ -43,6 +21,7 @@ class _LoginPageState extends State<LoginPage> {
     @override
     Widget build(BuildContext context) {
         final request = context.watch<AuthProvider>();
+
         return Scaffold(
             appBar: AppBar(
                 title: const Text('Login'),
@@ -72,31 +51,19 @@ class _LoginPageState extends State<LoginPage> {
                                 String username = _usernameController.text;
                                 String password = _passwordController.text;
 
-                                final response = await request.login("http://localhost:8000/auth/login/", {
+                                final response = await request.login("http://localhost:8000/u/api/v1/masuk/", {
                                     'username': username,
                                     'password': password,
                                 });
 
                                 if (request.loggedIn) {
-                                    String message = response['message'];
                                     String uname = response['username'];
+                                    User? user = request.user;
                                     if (context.mounted) {
-                                        User? user = context.watch<AuthProvider>().user;
-                                        if(user?.role == "penjual") {
-                                            Navigator.pushReplacement(
-                                                context,
-                                                MaterialPageRoute(builder: (context) => LandingPagePenjual(user: user)),
-                                            );
-                                        } else {
-                                            Navigator.pushReplacement(
-                                                context,
-                                                MaterialPageRoute(builder: (context) => LandingPagePembeli(user: user)),
-                                            );
-                                        }
-                                        ScaffoldMessenger.of(context)
-                                            ..hideCurrentSnackBar()
-                                            ..showSnackBar(
-                                                SnackBar(content: Text("$message Selamat datang, $uname.")));
+                                      Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute(builder: (context) => const HomeScreen())
+                                      );
                                     }
                                 } else {
                                     if (context.mounted) {

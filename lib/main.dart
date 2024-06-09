@@ -10,7 +10,15 @@ import 'package:academeats_mobile/pages/user/login.dart';
 import 'package:academeats_mobile/models/cart.dart';
 
 void main() {
-  runApp(const MainApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        Provider(create: (_) => AuthProvider()),
+        ChangeNotifierProvider(create: (_) => CartProvider()),
+      ],
+      child: const MainApp(),
+    ),
+  );
 }
 
 class MainApp extends StatelessWidget {
@@ -34,14 +42,7 @@ class MainApp extends StatelessWidget {
             onError: Colors.white,
             onSurface: Colors.black87),
       ),
-      home: MultiProvider(
-        providers: [
-          Provider(create: (_) => AuthProvider()),
-          ChangeNotifierProvider(create: (_) => CartProvider()),
-        ],
-
-        child: const HomeScreen(),
-      ),
+      home: const LoginPage(),
     );
   }
 }
