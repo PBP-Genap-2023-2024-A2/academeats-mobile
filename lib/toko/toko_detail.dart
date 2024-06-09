@@ -93,7 +93,7 @@ class _TokoDetailScreenState extends State<TokoDetailScreen> {
                         borderRadius: BorderRadius.circular(10),
                         image: const DecorationImage(
                           image:
-                              NetworkImage('https://via.placeholder.com/150'),
+                          NetworkImage('https://via.placeholder.com/150'),
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -102,23 +102,23 @@ class _TokoDetailScreenState extends State<TokoDetailScreen> {
                     Text(
                       widget.toko.name,
                       style: Theme.of(context).textTheme.headline5?.copyWith(
-                            color: const Color(0xFF625A1D),
-                            fontWeight: FontWeight.bold,
-                          ),
+                        color: const Color(0xFF625A1D),
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     const SizedBox(height: 10),
                     Text(
                       'Owner: ${widget.toko.user.namaLengkap}',
                       style: Theme.of(context).textTheme.subtitle1?.copyWith(
-                            color: const Color(0xFF383A48),
-                          ),
+                        color: const Color(0xFF383A48),
+                      ),
                     ),
                     const SizedBox(height: 10),
                     Text(
                       'Deskripsi: ${widget.toko.description}',
                       style: Theme.of(context).textTheme.subtitle1?.copyWith(
-                            color: const Color(0xFF383A48),
-                          ),
+                        color: const Color(0xFF383A48),
+                      ),
                     ),
                     const SizedBox(height: 20),
                     ElevatedButton(
@@ -141,9 +141,9 @@ class _TokoDetailScreenState extends State<TokoDetailScreen> {
                     Text(
                       'Available Makanan',
                       style: Theme.of(context).textTheme.headline6?.copyWith(
-                            color: const Color(0xFFE0719E),
-                            fontWeight: FontWeight.bold,
-                          ),
+                        color: const Color(0xFFE0719E),
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     const SizedBox(height: 10),
                     ListView.builder(
@@ -232,40 +232,49 @@ class _TokoDetailScreenState extends State<TokoDetailScreen> {
                                   );
                                 }
                               },
-                              child: Container(
+                              child: Padding(
                                 padding: const EdgeInsets.all(16.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                child: Row(
                                   children: [
-                                    Text(
-                                      makanan.nama,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .subtitle1
-                                          ?.copyWith(
-                                            color: const Color(0xFF383A48),
-                                            fontWeight: FontWeight.bold,
-                                          ),
+                                    // Image widget to display the food image
+                                    ClipRRect(
+                                      borderRadius: BorderRadius.circular(8.0),
+                                      child: Image.network(
+                                        makanan.imgUrl, // Use the image URL from your Makanan model
+                                        width: 80,
+                                        height: 80,
+                                        fit: BoxFit.cover,
+                                      ),
                                     ),
-                                    const SizedBox(height: 5),
-                                    Text(
-                                      'Harga: ${makanan.harga}',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyText1
-                                          ?.copyWith(
-                                            color: const Color(0xFF383A48),
+                                    const SizedBox(width: 16), // Add spacing between the image and text
+                                    // Text widgets for food details
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            makanan.nama,
+                                            style: Theme.of(context).textTheme.subtitle1?.copyWith(
+                                              color: const Color(0xFF383A48),
+                                              fontWeight: FontWeight.bold,
+                                            ),
                                           ),
-                                    ),
-                                    const SizedBox(height: 5),
-                                    Text(
-                                      'Stok: ${makanan.stok}',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyText1
-                                          ?.copyWith(
-                                            color: const Color(0xFF383A48),
+                                          const SizedBox(height: 5),
+                                          Text(
+                                            'Harga: ${makanan.harga}',
+                                            style: Theme.of(context).textTheme.bodyText1?.copyWith(
+                                              color: const Color(0xFF383A48),
+                                            ),
                                           ),
+                                          const SizedBox(height: 5),
+                                          Text(
+                                            'Stok: ${makanan.stok}',
+                                            style: Theme.of(context).textTheme.bodyText1?.copyWith(
+                                              color: const Color(0xFF383A48),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ],
                                 ),

@@ -18,7 +18,7 @@ class HomeScreen extends StatelessWidget {
         Provider(create: (_) => AuthProvider()),
         ChangeNotifierProvider(create: (_) => CartProvider()),
       ],
-      child: OrderScreen(userRole),
+      child: OrderScreen(),
     );
   }
 }
