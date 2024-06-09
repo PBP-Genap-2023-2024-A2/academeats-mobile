@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:academeats_mobile/models/toko.dart';
+import 'package:provider/provider.dart';
+import '../../auth/auth.dart';
 import '../../utils/fetch.dart';
 import 'order_screen_for_penjual.dart'; // Import your OrderScreenForPenjual here
 
@@ -10,12 +12,14 @@ class TokoScreenForPenjual extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    AuthProvider auth = context.watch<AuthProvider>();
+    String username = auth.user?.username ?? "";
     return Scaffold(
       appBar: AppBar(
         title: const Text('Toko'),
       ),
       body: FutureBuilder(
-        future: fetchData('toko/api/v1/user/test/1'), // TODO: janlup ganti ke url yg bener
+        future: fetchData('toko/api/v1/user/$username/'),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
