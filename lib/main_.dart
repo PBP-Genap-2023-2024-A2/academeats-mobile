@@ -39,7 +39,7 @@ class HomeScreen extends StatelessWidget {
     // TODO: fetch user role properly
     //AuthProvider auth = context.watch<AuthProvider>();
     //String userRole = auth.user!.role;
-    String userRole = 'Penjual';
+    String userRole = 'Pembeli';
 
     return OrderScreen(userRole: userRole);
   }
