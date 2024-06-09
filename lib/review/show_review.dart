@@ -83,39 +83,44 @@ class _ReviewPageState extends State<ReviewPage> {
               return const Center(child: Text('No reviews found.'));
             }
             return ListView.builder(
+              
               itemCount: reviews.length,
               itemBuilder: (context, index) {
                 Review? review = reviews[index];
-                return Card(
-                  elevation: 4,
-                  margin: const EdgeInsets.all(8),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('Nilai: ${review?.nilai}'),
-                        const SizedBox(height: 4),
-                        Text('Komentar: ${review?.komentar}'),
-                        const SizedBox(height: 4),
-                        if (review?.reply != null) ...[
-                          Text('Reply: ${review?.reply}'),
-                        ] else ...[
-                          const Text('Reply: (Belum ada balasan)'),
-                            if (review?.makanan?.toko.user == request.user) ...[
-                              ElevatedButton(
-                                onPressed: () {
-                                // Tambahkan aksi ketika tombol ditekan
-                                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => ReplyFormPage(reviews: review)));
-                                },
-                                child: const Text('Reply Review'),
-                              ),
-                            ]
+                if (review?.makanan!.nama == widget.makanans!.nama) {
+                  return Card(
+                    elevation: 4,
+                    margin: const EdgeInsets.all(8),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Nilai: ${review?.nilai}'),
+                          const SizedBox(height: 4),
+                          Text('Komentar: ${review?.komentar}'),
+                          const SizedBox(height: 4),
+                          if (review?.reply != null) ...[
+                            Text('Reply: ${review?.reply}'),
+                          ] else ...[
+                            const Text('Reply: (Belum ada balasan)'),
+                              if (review?.makanan?.toko.user == request.user) ...[
+                                ElevatedButton(
+                                  onPressed: () {
+                                  // Tambahkan aksi ketika tombol ditekan
+                                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => ReplyFormPage(reviews: review)));
+                                  },
+                                  child: const Text('Reply Review'),
+                                ),
+                              ]
+                          ],
                         ],
-                      ],
+                      ),
                     ),
-                  ),
-                );
+                  );
+                } else {
+                    return SizedBox.shrink();
+                }
               },
             );
           } else {
