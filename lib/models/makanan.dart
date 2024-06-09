@@ -1,5 +1,7 @@
 import 'package:academeats_mobile/models/toko.dart';
 
+import 'base_model.dart';
+
 class Makanan implements ISendable {
   int id;
   String nama;
@@ -25,13 +27,13 @@ class Makanan implements ISendable {
     imgUrl: json['img_url'],
     toko: Toko.fromJson(json['toko']),
   );
-  
+
   Map<String, dynamic> toJson() => {
     'id': id,
     'nama': nama,
     'harga': harga,
     'stok': stok,
     'img_url': imgUrl,
-    'toko': toko.toJson(),
+    'toko': toko.id, // Assuming you're only sending the toko ID
   };
 }

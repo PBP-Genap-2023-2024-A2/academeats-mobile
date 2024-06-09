@@ -50,7 +50,8 @@ class _HomeScreenState extends State<HomeScreen> {
           });
         },
         destinations: const [
-          NavigationDestination(icon: Icon(Icons.home_filled), label: "Home",)
+          NavigationDestination(icon: Icon(Icons.home_filled), label: "Home",),
+          NavigationDestination(icon: Icon(Icons.home_filled), label: "Home",),
         ],
       ),
       body: _pageList[_currentPageIndex],
