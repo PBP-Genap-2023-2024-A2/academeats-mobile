@@ -2,11 +2,10 @@ import 'package:academeats_mobile/utils/fetch.dart';
 import 'package:flutter/material.dart';
 import '../../models/order_group.dart';
 import '../../models/order.dart';
+import '../../review/create_review.dart';
 
 class OrderScreenForPembeli extends StatefulWidget {
-  final int ogId;
-
-  OrderScreenForPembeli(this.ogId, {super.key});
+  OrderScreenForPembeli({super.key});
 
   @override
   _OrderScreenForPembeliState createState() => _OrderScreenForPembeliState();
@@ -23,7 +22,7 @@ class _OrderScreenForPembeliState extends State<OrderScreenForPembeli> {
 
   void _fetchOrderData() {
     setState(() {
-      _orderData = fetchData('order/api/v1/order_group/${widget.ogId}');
+      _orderData = fetchData('order/api/v1/flutter_get_og_by_user/test/1/');
     });
   }
 
@@ -41,19 +40,20 @@ class _OrderScreenForPembeliState extends State<OrderScreenForPembeli> {
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else {
-            final orderGroup = OrderGroup.fromJson(snapshot.data!['og']);
-            List<Order> orders = [];
-            String orderStatus = snapshot.data!['status'];
-            for (int i = 0; i < snapshot.data!['orders'].length; i++) {
-              Order order = Order.fromJson(snapshot.data!['orders'][i]);
-              orders.add(order);
-            }
+            List<OrderGroup> orderGroups = (snapshot.data!['data'] as List)
+                .map((data) => OrderGroup.fromJson(data))
+                .toList();
 
-            return OrderGroupCard(
-              orderGroup: orderGroup,
-              orders: orders,
-              orderStatus: orderStatus,
-              onOrderCanceled: _fetchOrderData,
+            return ListView.builder(
+              padding: const EdgeInsets.all(16),
+              itemCount: orderGroups.length,
+              itemBuilder: (context, index) {
+                final orderGroup = orderGroups[index];
+                return OrderGroupCard(
+                  orderGroup: orderGroup,
+                  onOrderCanceled: _fetchOrderData,
+                );
+              },
             );
           }
         },
@@ -64,81 +64,102 @@ class _OrderScreenForPembeliState extends State<OrderScreenForPembeli> {
 
 class OrderGroupCard extends StatelessWidget {
   final OrderGroup orderGroup;
-  final List<Order> orders;
-  final String orderStatus;
   final VoidCallback onOrderCanceled;
 
   OrderGroupCard({
     required this.orderGroup,
-    required this.orders,
-    required this.orderStatus,
     required this.onOrderCanceled,
   });
 
   @override
   Widget build(BuildContext context) {
+    List<Order> orders = orderGroup.orders;
     return Card(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('Order ID: ${orderGroup.id}'),
-                Text('Total: Rp${orderGroup.totalHarga}'),
-              ],
+      margin: const EdgeInsets.symmetric(vertical: 8),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('Order ID: ${orderGroup.id}'),
+                  Text('Total: Rp${orderGroup.totalHarga}'),
+                ],
+              ),
             ),
-          ),
-          ListView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: orders.length,
-            itemBuilder: (context, index) {
-              final order = orders[index];
-              return _buildOrderCard(order);
-            },
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Divider(color: Colors.brown),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text('Status Pesanan:'),
-                    Text(orderStatus),
-                  ],
-                ),
-                ElevatedButton(
-                  onPressed: (orderStatus == 'DIBATALKAN')
-                      ? null
-                      : () async {
-                    await cancelOrder(orderGroup);
-                    onOrderCanceled(); // Trigger the callback to refresh the UI
-                  },
-                  child: const Text('Batalkan Pesanan'),
-                ),
-              ],
+            ListView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: orders.length,
+              itemBuilder: (context, index) {
+                final order = orders[index];
+                return _buildOrderCard(order, context);
+              },
             ),
-          ),
-        ],
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Divider(color: Colors.brown),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text('Status Pesanan:'),
+                      Text(orderGroup.status),
+                    ],
+                  ),
+                  ElevatedButton(
+                    onPressed: (orderGroup.status == 'DIBATALKAN' || orderGroup.status == 'SELESAI')
+                        ? null
+                        : () async {
+                      await cancelOrder(orderGroup);
+                      onOrderCanceled(); // Trigger the callback to refresh the UI
+                    },
+                    child: const Text('Batalkan Pesanan'),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 
-  Widget _buildOrderCard(Order order) {
+  Widget _buildOrderCard(Order order, BuildContext context) {
     return Card(
+      margin: const EdgeInsets.symmetric(vertical: 4),
       child: ListTile(
         title: Text(order.nama),
-        subtitle: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        subtitle: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Jumlah: ${order.quantity}'),
-            Text('Status: ${order.status}'),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text('Jumlah: ${order.quantity}'),
+              ],
+            ),
+            if (order.status == 'SELESAI')
+              Align(
+                alignment: Alignment.centerRight,
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ReviewFormPage(makanans: order.makanan),
+                      ),
+                    );
+                  },
+                  child: const Text('Review'),
+                ),
+              ),
           ],
         ),
       ),

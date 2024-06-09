@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import '../models/makanan.dart';
 import '../models/toko.dart';
+import '../models/makanan.dart';
+import '../utils/fetch.dart';
 
 class TambahMakananPage extends StatefulWidget {
   final Toko toko;
 
-  TambahMakananPage({required this.toko, Key? key}) : super(key: key);
+  TambahMakananPage({required this.toko});
 
   @override
   _TambahMakananPageState createState() => _TambahMakananPageState();
@@ -16,26 +17,42 @@ class _TambahMakananPageState extends State<TambahMakananPage> {
   final _namaController = TextEditingController();
   final _hargaController = TextEditingController();
   final _stokController = TextEditingController();
+  final _imgUrlController = TextEditingController();
 
-  @override
-  void dispose() {
-    _namaController.dispose();
-    _hargaController.dispose();
-    _stokController.dispose();
-    super.dispose();
-  }
-
-  void _submitForm() {
-    if (_formKey.currentState!.validate()) {
+  Future<void> _submitForm() async {
+    if (_formKey.currentState?.validate() ?? false) {
       final newMakanan = Makanan(
-        id: 0, // This should be set by your backend
+        id: 0, // This will be set by the backend
         nama: _namaController.text,
-        harga: double.parse(_hargaController.text),
-        stok: int.parse(_stokController.text),
-        imgUrl: 'https://via.placeholder.com/150', // Example placeholder image
+        harga: double.tryParse(_hargaController.text) ?? 0,
+        stok: int.tryParse(_stokController.text) ?? 0,
+        imgUrl: _imgUrlController.text,
         toko: widget.toko,
       );
-      Navigator.pop(context, newMakanan);
+
+      try {
+        final jsonData = newMakanan.toJson();
+        print('Sending data to the server: $jsonData'); // Debugging output
+
+        final response = await postData(
+          'makanan/api/v1/toko/${widget.toko.id}/add',
+          jsonData,
+        );
+
+        print('Server response: $response'); // Debugging output
+
+        if (response['success'] == true) {
+          Navigator.pop(context, newMakanan);
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Failed to add makanan: ${response['message']}')),
+          );
+        }
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error: $e')),
+        );
+      }
     }
   }
 
@@ -44,89 +61,91 @@ class _TambahMakananPageState extends State<TambahMakananPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Tambah Makanan'),
-        backgroundColor: const Color(0xFFF6E049), // Primary color
+        backgroundColor: const Color(0xFFF6E049),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,
-          child: ListView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: 20),
-              Text(
-                'Tambah Makanan',
-                style: Theme.of(context).textTheme.headline5?.copyWith(
-                  color: const Color(0xFFE0719E), // Pink text color
-                  fontWeight: FontWeight.bold,
-                ),
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(height: 20),
               TextFormField(
                 controller: _namaController,
                 decoration: InputDecoration(
                   labelText: 'Nama Makanan',
                   border: OutlineInputBorder(),
-                  filled: true,
-                  fillColor: const Color(0xFFFDF9DB),
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Nama Makanan tidak boleh kosong';
+                    return 'Nama makanan tidak boleh kosong';
                   }
                   return null;
                 },
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 10),
               TextFormField(
                 controller: _hargaController,
                 decoration: InputDecoration(
                   labelText: 'Harga',
                   border: OutlineInputBorder(),
-                  filled: true,
-                  fillColor: const Color(0xFFFDF9DB),
                 ),
                 keyboardType: TextInputType.number,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Harga tidak boleh kosong';
                   }
+                  if (double.tryParse(value) == null) {
+                    return 'Harga harus berupa angka';
+                  }
                   return null;
                 },
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 10),
               TextFormField(
                 controller: _stokController,
                 decoration: InputDecoration(
                   labelText: 'Stok',
                   border: OutlineInputBorder(),
-                  filled: true,
-                  fillColor: const Color(0xFFFDF9DB),
                 ),
                 keyboardType: TextInputType.number,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Stok tidak boleh kosong';
                   }
+                  if (int.tryParse(value) == null) {
+                    return 'Stok harus berupa angka';
+                  }
                   return null;
                 },
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 10),
+              TextFormField(
+                controller: _imgUrlController,
+                decoration: InputDecoration(
+                  labelText: 'Image URL',
+                  border: OutlineInputBorder(),
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Image URL tidak boleh kosong';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: _submitForm,
-                child: Padding(
-                  padding: EdgeInsets.symmetric(vertical: 15, horizontal: 50),
-                  child: Text('Tambah Makanan', style: TextStyle(fontSize: 18)),
-                ),
+                child: Text('Tambah Makanan'),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFFE0719E), // Pink button color
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                  foregroundColor: Colors.white, backgroundColor: const Color(0xFFE0719E), // text color
                 ),
               ),
             ],
           ),
         ),
       ),
+      backgroundColor: const Color(0xFFF3F6E6),
     );
   }
 }
