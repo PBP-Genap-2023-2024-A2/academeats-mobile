@@ -8,7 +8,6 @@ import '../../utils/fetch.dart';
 import 'order_screen_for_penjual.dart'; // Import your OrderScreenForPenjual here
 
 class TokoScreenForPenjual extends StatelessWidget {
-
   TokoScreenForPenjual({super.key});
 
   @override
@@ -17,7 +16,7 @@ class TokoScreenForPenjual extends StatelessWidget {
     String username = auth.user?.username ?? "";
     return Scaffold(
       appBar: AppBar(
-          title: const Text('Daftar Tokomu'),
+        title: const Text('Daftar Tokomu'),
       ),
       body: FutureBuilder(
         future: fetchData('toko/api/v1/user/$username/'),
@@ -27,18 +26,24 @@ class TokoScreenForPenjual extends StatelessWidget {
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else {
-            return GridView.builder(
-              padding: const EdgeInsets.all(16),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3,
-                mainAxisSpacing: 10,
-                crossAxisSpacing: 10,
+            return SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: GridView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3,
+                    mainAxisSpacing: 10,
+                    crossAxisSpacing: 10,
+                  ),
+                  itemCount: snapshot.data!['data'].length,
+                  itemBuilder: (context, index) {
+                    final toko = Toko.fromJson(snapshot.data!['data'][index]);
+                    return TokoCard(toko: toko);
+                  },
+                ),
               ),
-              itemCount: snapshot.data!['data'].length,
-              itemBuilder: (context, index) {
-                final toko = Toko.fromJson(snapshot.data!['data'][index]);
-                return TokoCard(toko: toko);
-              },
             );
           }
         },
