@@ -1,13 +1,13 @@
 import 'package:academeats_mobile/models/makanan.dart';
 import 'package:academeats_mobile/models/toko.dart';
 import 'package:academeats_mobile/models/user.dart';
-import 'package:academeats_mobile/pages/review/create_review.dart';
-import 'package:academeats_mobile/pages/review/reply_review.dart';
+import 'package:academeats_mobile/review/create_review.dart';
+import 'package:academeats_mobile/review/reply_review.dart';
 import 'package:academeats_mobile/pages/user/login.dart';
 import 'package:academeats_mobile/utils/fetch.dart';
 import 'package:flutter/material.dart';
 
-import '../../models/review.dart';
+import '../models/review.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -66,24 +66,6 @@ class _ReviewPageState extends State<ReviewPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Reviews'),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.store),
-            label: 'Toko',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.receipt_long_outlined),
-            label: 'Orders',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person_rounded),
-            label: 'Profile',
-          ),
-        ],
-        currentIndex: _selectedIndex, //New
-        onTap: _onItemTapped, 
       ),
       body: FutureBuilder<List<Review?>>(
         future: futureReviews,
