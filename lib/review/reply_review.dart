@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:academeats_mobile/auth/auth.dart';
 import 'package:academeats_mobile/models/review.dart';
 import 'package:academeats_mobile/review/show_review.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +21,7 @@ class _ReplyFormPageState extends State<ReplyFormPage> {
     String _reply = "";
     @override
     Widget build(BuildContext context) {
-        final request = context.watch<CookieRequest>();
+        final request = context.watch<AuthProvider>();
         return Scaffold(
           appBar: AppBar(
               title: const Center(
@@ -84,10 +85,12 @@ class _ReplyFormPageState extends State<ReplyFormPage> {
                                                         .showSnackBar(const SnackBar(
                                                     content: Text("Reply berhasil disimpan!"),
                                                     ));
-                                                    Navigator.pushReplacement(
-                                                        context,
-                                                        MaterialPageRoute(builder: (context) => const ReviewPage()),
-                                                    );
+                                                    // Tambahkan rute ke halaman makanan
+                                                    // Navigator.pushReplacement(
+                                                    //     context,
+                                                        
+                                                    //     MaterialPageRoute(builder: (context) => const ReviewPage()),
+                                                    // );
                                                 } else {
                                                     ScaffoldMessenger.of(context)
                                                         .showSnackBar(const SnackBar(
