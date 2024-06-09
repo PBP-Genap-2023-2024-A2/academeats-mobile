@@ -86,3 +86,6 @@ Untuk mengintegrasikan mobile app dengan web app yang telah kami buat pada proye
 2. Melakukan unit testing untuk memsatikan setiap fitur yang tersedia pada web dapat diakses menggunakan endpoint API yang telah kami buat pada poin satu (1) menggunakan Postman;
 3. Menyusun interface untuk setiap fitur pada mobile app dengan meng-consume data dari web app melalui endpoint API yang telah dibuat; dan
 4. Melakukan full testing dengan sistem cross-check untuk memastikan bahwa data yang diconsume oleh web app dan mobile app berasal dari sumber yang sama.
+
+### Link Aplikasi Academeats Mobile
+https://install.appcenter.ms/orgs/academeats-pbp/apps/academeats/distribution_groups/public
