@@ -71,7 +71,6 @@ class _TrackerFormPageState extends State<ReplyFormPage> {
                                       ),
                                       onPressed: () async {
                                           if (_formKey.currentState!.validate()) {
-                                            print("review/api/v1/reply/${widget.reviews!.id}/");
                                             final response = await request.postJson(
                                                 "http://localhost:8000/review/api/v1/reply/${widget.reviews!.id}",
                                                 jsonEncode(<String, String>{
