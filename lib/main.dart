@@ -10,6 +10,7 @@ import 'package:academeats_mobile/pages/user/login.dart';
 import 'package:academeats_mobile/models/cart.dart';
 
 void main() {
+  Provider.debugCheckInvalidValueType = null;
   runApp(
     MultiProvider(
       providers: [

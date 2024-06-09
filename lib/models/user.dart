@@ -5,6 +5,8 @@ class User {
   String namaPanggilan;
   String bio;
   String role;
+  double saldo;
+  String? pfp_url;
   // DateTime tanggalBergabung;
 
   User({
@@ -14,6 +16,8 @@ class User {
     required this.namaPanggilan,
     required this.bio,
     required this.role,
+    required this.saldo,
+    required this.pfp_url
     // required this.tanggalBergabung,
   });
 
@@ -22,8 +26,10 @@ class User {
     username: json["username"],
     namaLengkap: json["nama_lengkap"],
     namaPanggilan: json["nama_panggilan"],
-    bio: json["bio"],
+    bio: json["bio"] ?? "-",
     role: json["role"],
+    saldo: json["saldo"] ?? 0,
+    pfp_url: json["pfp_url"] ?? "https://i.quotev.com/hiaa3fa55smq.jpg",
     // tanggalBergabung: DateTime.parse(json["tanggal_bergabung"]),
   );
 

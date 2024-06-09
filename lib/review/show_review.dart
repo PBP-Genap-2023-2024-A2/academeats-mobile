@@ -1,3 +1,4 @@
+import 'package:academeats_mobile/auth/auth.dart';
 import 'package:academeats_mobile/models/makanan.dart';
 import 'package:academeats_mobile/models/toko.dart';
 import 'package:academeats_mobile/models/user.dart';
@@ -6,11 +7,13 @@ import 'package:academeats_mobile/review/reply_review.dart';
 import 'package:academeats_mobile/pages/user/login.dart';
 import 'package:academeats_mobile/utils/fetch.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../keranjang/keranjang_screen.dart';
 import '../models/review.dart';
 class ReviewPage extends StatefulWidget {
-  const ReviewPage({super.key});
+  final Makanan? makanans;
+  const ReviewPage({super.key, required this.makanans});
 
   @override
   State<ReviewPage> createState() => _ReviewPageState();
@@ -47,6 +50,7 @@ class _ReviewPageState extends State<ReviewPage> {
 
   @override
   Widget build(BuildContext context) {
+    final request = context.watch<AuthProvider>();
     return Scaffold(
       appBar: AppBar(
         title: const Text('Reviews'),
@@ -94,13 +98,15 @@ class _ReviewPageState extends State<ReviewPage> {
                           Text('Reply: ${review?.reply}'),
                         ] else ...[
                           const Text('Reply: (Belum ada balasan)'),
-                          ElevatedButton(
-                            onPressed: () {
-                              // Tambahkan aksi ketika tombol ditekan
-                              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => ReplyFormPage(reviews: review)));
-                            },
-                            child: const Text('Reply Review'),
-                          ),
+                            if (review?.makanan?.toko.user == request.user) ...[
+                              ElevatedButton(
+                                onPressed: () {
+                                // Tambahkan aksi ketika tombol ditekan
+                                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => ReplyFormPage(reviews: review)));
+                                },
+                                child: const Text('Reply Review'),
+                              ),
+                            ]
                         ],
                       ],
                     ),

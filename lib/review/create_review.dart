@@ -115,7 +115,7 @@ class _ReviewFormPageState extends State<ReviewFormPage> {
                                       onPressed: () async {
                                           if (_formKey.currentState!.validate()) {
                                             final response = await request.postJson(
-                                                "http://localhost:8000/review/api/v1/create/${widget.makanans!.id}",
+                                                "http://localhost:8000/review/api/v1/create/${widget.makanans!.id}/${request.user!.username}/",
                                                 jsonEncode(<String, String>{
                                                     'nilai': _nilai.toString(),
                                                     'komentar': _komentar
@@ -127,10 +127,11 @@ class _ReviewFormPageState extends State<ReviewFormPage> {
                                                         .showSnackBar(const SnackBar(
                                                     content: Text("Komentar berhasil disimpan!"),
                                                     ));
-                                                    Navigator.pushReplacement(
-                                                        context,
-                                                        MaterialPageRoute(builder: (context) => const ReviewPage()),
-                                                    );
+                                                    // Tambahkan rute ke halaman makanan
+                                                    // Navigator.pushReplacement(
+                                                    //     context,
+                                                    //     MaterialPageRoute(builder: (context) => const ReviewPage()),
+                                                    // );
                                                 } else {
                                                     ScaffoldMessenger.of(context)
                                                         .showSnackBar(const SnackBar(
