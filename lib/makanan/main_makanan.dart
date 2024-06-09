@@ -26,8 +26,7 @@ class _TestWidgetState extends State<TestWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: CustomScrollView(
+    return CustomScrollView(
         slivers: [
           SliverAppBar(
             title: const Text('Food'),
@@ -289,7 +288,6 @@ class _TestWidgetState extends State<TestWidget> {
             ),
           ),
         ],
-      ),
     );
   }
 }

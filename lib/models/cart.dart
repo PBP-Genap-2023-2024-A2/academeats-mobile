@@ -13,10 +13,18 @@ class CartProvider extends ChangeNotifier {
 
   UnmodifiableListView<CartObject> get items => UnmodifiableListView(_items);
 
-  void add(CartObject item) {
-    _items.add(item);
-    totalHarga += item.makanan.harga * item.jumlah;
-    notifyListeners();
+  void add(String username, int id_makanan, int? jumlah) async {
+    int _jumlah = jumlah ?? 1;
+    
+    final data = await fetchData('keranjang/api/v1/tambah-item/', method: RequestMethod.post, body: {
+      'id_makanan': id_makanan,
+      'username': username,
+      'jumlah': _jumlah,
+    });
+
+    CartObject item = CartObject.fromJson(data);
+    
+    _add(item);
   }
 
   void remove(CartObject item) {
@@ -25,11 +33,18 @@ class CartProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void _add(CartObject item) {
+    _items.add(item);
+    totalHarga += item.makanan.harga * item.jumlah;
+    notifyListeners();
+  }
+
   void fetchCart(User user) async {
     var keranjangData = await fetchData('keranjang/api/v1/get-keranjang-item/${user.username}/');
 
-    for (CartObject item in keranjangData['data']) {
-      add(item);
+    for (var data in keranjangData['data']) {
+      CartObject item = CartObject.fromJson(data);
+      _add(item);
     }
   }
 
@@ -39,25 +54,25 @@ class CartProvider extends ChangeNotifier {
 }
 
 class CartObject implements ISendable {
-  int pk;
+  int id;
   Makanan makanan;
   int jumlah;
 
   CartObject({
-    required this.pk,
+    required this.id,
     required this.makanan,
     required this.jumlah,
   });
 
   factory CartObject.fromJson(Map<String, dynamic> json) => CartObject(
-    pk: json["pk"],
+    id: json["id"],
     makanan: Makanan.fromJson(json['makanan']),
     jumlah: json['jumlah'],
   );
 
   @override
   Map<String, dynamic> toJson() => {
-    'pk': pk,
+    'id': id,
     'makanan': makanan.toJson(),
     'jumlah': jumlah
   };
