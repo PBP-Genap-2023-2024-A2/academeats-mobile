@@ -3,7 +3,7 @@ import 'makanan.dart';
 
 class KeranjangItem {
   final int id;
-  final int jumlah;
+  int jumlah;
   final User user;
   final Makanan makanan;
 
