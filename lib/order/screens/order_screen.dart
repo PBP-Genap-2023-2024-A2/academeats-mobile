@@ -19,7 +19,7 @@ class OrderScreen extends StatelessWidget {
     } else if (userRole == 'Pembeli') {
       // TODO: get the actual ogId
       final int ogId = 1;
-      return OrderScreenForPembeli(ogId);
+      return OrderScreenForPembeli();
     } else {
       return const Scaffold(
         body: Center(child: Text('Unknown user role')),
