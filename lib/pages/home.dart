@@ -50,7 +50,7 @@ class LandingPage extends StatelessWidget {
                     // Navigate to the login page
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => LoginApp()),
+                      MaterialPageRoute(builder: (context) => const LoginApp()),
                     );
                   },
                   child: const Text('Daftar Sekarang'),
