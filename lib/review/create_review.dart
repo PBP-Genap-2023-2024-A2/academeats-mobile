@@ -12,10 +12,10 @@ class ReviewFormPage extends StatefulWidget {
     const ReviewFormPage({super.key, required this.makanans});
 
     @override
-    State<ReviewFormPage> createState() => _TrackerFormPageState();
+    State<ReviewFormPage> createState() => _ReviewFormPageState();
 }
 
-class _TrackerFormPageState extends State<ReviewFormPage> {
+class _ReviewFormPageState extends State<ReviewFormPage> {
     final _formKey = GlobalKey<FormState>();
     String _komentar = "";
     int _nilai = 0;
