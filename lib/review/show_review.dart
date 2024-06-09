@@ -1,23 +1,13 @@
 import 'package:academeats_mobile/models/makanan.dart';
 import 'package:academeats_mobile/models/toko.dart';
 import 'package:academeats_mobile/models/user.dart';
-import 'package:academeats_mobile/pages/review/create_review.dart';
-import 'package:academeats_mobile/pages/review/reply_review.dart';
+import 'package:academeats_mobile/review/create_review.dart';
+import 'package:academeats_mobile/review/reply_review.dart';
 import 'package:academeats_mobile/pages/user/login.dart';
 import 'package:academeats_mobile/utils/fetch.dart';
 import 'package:flutter/material.dart';
 
-import '../../models/review.dart';
-
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return ReviewFormPage(makanans: Makanan(id: 2, nama: "pempek", harga: 3000, stok: 2, imgUrl: "", toko: Toko(id: 1, user: User (bio: "", id: 0, username: '', namaLengkap: '', namaPanggilan: '', role: 'penjual'), name: "Jl. Pempek", description: "Pempek Palembang")));
-  }
-}
-
+import '../models/review.dart';
 class ReviewPage extends StatefulWidget {
   const ReviewPage({super.key});
 
@@ -27,18 +17,11 @@ class ReviewPage extends StatefulWidget {
 
 class _ReviewPageState extends State<ReviewPage> {
   late Future<List<Review?>> futureReviews;
-  int _selectedIndex = 0;
 
   @override
   void initState() {
     super.initState();
     futureReviews = fetchReviews();
-  }
-
-  void _onItemTapped(int index) {
-        setState(() {
-          _selectedIndex = index;
-        });
   }
 
   Future<List<Review?>> fetchReviews() async {
@@ -66,24 +49,6 @@ class _ReviewPageState extends State<ReviewPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Reviews'),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.store),
-            label: 'Toko',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.receipt_long_outlined),
-            label: 'Orders',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person_rounded),
-            label: 'Profile',
-          ),
-        ],
-        currentIndex: _selectedIndex, //New
-        onTap: _onItemTapped, 
       ),
       body: FutureBuilder<List<Review?>>(
         future: futureReviews,

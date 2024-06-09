@@ -1,6 +1,8 @@
 import 'package:academeats_mobile/auth/auth.dart';
 import 'package:academeats_mobile/forum/forum_home.dart';
 import 'package:academeats_mobile/makanan/main_makanan.dart';
+import 'package:academeats_mobile/order/screens/order_screen.dart';
+import 'package:academeats_mobile/pages/user/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -17,13 +19,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
 
   int _currentPageIndex = 0;
-
-  final List<Widget> _pageList = <Widget>[
-    const MainMakananScreen(),
-    const ForumHomePage(),
-    // const TrackOrder(),
-    // const Profile(),
-  ];
+  User? _user;
 
   @override
   void initState() {
@@ -32,6 +28,10 @@ class _HomeScreenState extends State<HomeScreen> {
     User? user = Provider
         .of<AuthProvider>(context, listen: false)
         .user;
+
+    setState(() {
+      _user = user;
+    });
 
     // Get initial state for cart and user
     if (user != null) {
@@ -43,8 +43,17 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final List<Widget> _pageList = <Widget>[
+      const MainMakananScreen(),
+      const ForumHomePage(),
+      const OrderScreen(),
+      const ProfilePage(),
+    ];
+
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+
+      ),
       bottomNavigationBar: NavigationBar(
         selectedIndex: _currentPageIndex,
         onDestinationSelected: (index) {
