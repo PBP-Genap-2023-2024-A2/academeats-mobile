@@ -2,6 +2,7 @@ import 'package:academeats_mobile/utils/fetch.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../auth/auth.dart';
+import '../../keranjang/keranjang_screen.dart';
 import '../../models/order_group.dart';
 import '../../models/order.dart';
 import '../../review/create_review.dart';
@@ -36,8 +37,21 @@ class _OrderScreenForPembeliState extends State<OrderScreenForPembeli> {
     String username = auth.user?.username ?? "";
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Order'),
-      ),
+          title: const Text('Order'),
+          actions: [
+      IconButton(
+      icon: const Icon(Icons.shopping_cart),
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => KeranjangScreen(),
+          ),
+        );
+      },
+    ),
+    ]
+    ),
       body: FutureBuilder(
         future: _orderData,
         builder: (context, snapshot) {
