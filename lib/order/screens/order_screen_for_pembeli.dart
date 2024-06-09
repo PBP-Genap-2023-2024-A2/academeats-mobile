@@ -1,5 +1,7 @@
 import 'package:academeats_mobile/utils/fetch.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../../auth/auth.dart';
 import '../../models/order_group.dart';
 import '../../models/order.dart';
 import '../../review/create_review.dart';
@@ -16,18 +18,22 @@ class _OrderScreenForPembeliState extends State<OrderScreenForPembeli> {
 
   @override
   void initState() {
+    AuthProvider auth = Provider.of<AuthProvider>(context, listen: false);
+    String username = auth.user?.username ?? "";
     super.initState();
-    _fetchOrderData();
+    _fetchOrderData(username);
   }
 
-  void _fetchOrderData() {
+  void _fetchOrderData(String username) {
     setState(() {
-      _orderData = fetchData('order/api/v1/flutter_get_og_by_user/test/1/');
+      _orderData = fetchData('order/api/v1/flutter_get_og_by_user/$username/');
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    AuthProvider auth = context.watch<AuthProvider>();
+    String username = auth.user?.username ?? "";
     return Scaffold(
       appBar: AppBar(
         title: const Text('Order'),
@@ -49,9 +55,10 @@ class _OrderScreenForPembeliState extends State<OrderScreenForPembeli> {
               itemCount: orderGroups.length,
               itemBuilder: (context, index) {
                 final orderGroup = orderGroups[index];
+
                 return OrderGroupCard(
                   orderGroup: orderGroup,
-                  onOrderCanceled: _fetchOrderData,
+                  onOrderCanceled: () => _fetchOrderData(username), // Pass the function as a callback
                 );
               },
             );

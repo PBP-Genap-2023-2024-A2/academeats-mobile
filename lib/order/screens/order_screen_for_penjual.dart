@@ -1,7 +1,6 @@
-import 'package:academeats_mobile/utils/fetch.dart';
 import 'package:flutter/material.dart';
+import 'package:academeats_mobile/utils/fetch.dart';
 import '../../models/order.dart';
-
 
 class OrderScreenForPenjual extends StatelessWidget {
   final int tokoId;
@@ -42,10 +41,23 @@ class OrderScreenForPenjual extends StatelessWidget {
   }
 }
 
-class OrderCard extends StatelessWidget {
+class OrderCard extends StatefulWidget {
   final Order order;
 
   const OrderCard({Key? key, required this.order}) : super(key: key);
+
+  @override
+  _OrderCardState createState() => _OrderCardState();
+}
+
+class _OrderCardState extends State<OrderCard> {
+  late Order order;
+
+  @override
+  void initState() {
+    super.initState();
+    order = widget.order;
+  }
 
   Color _getCardColor(String status) {
     switch (status) {
@@ -57,6 +69,34 @@ class OrderCard extends StatelessWidget {
         return Colors.green;
       default:
         return Colors.red;
+    }
+  }
+
+  Future<void> _updateOrderStatus(String newStatus) async {
+    try {
+      // Fetch the data and handle the response
+      final response = await fetchData(
+        'order/edit_status_penjual/',
+        method: RequestMethod.post,
+        body: {
+          'order_id': order.id,
+          'order_status': newStatus,
+        },
+      );
+
+      // Check the response for success status
+      if (response['status'] == 'success') {
+        setState(() {
+          order.status = newStatus;
+        });
+      } else {
+        // Handle specific error messages if available
+        final errorMessage = response['message'] ?? 'Failed to update order status';
+        throw Exception(errorMessage);
+      }
+    } catch (e) {
+      // Handle errors such as network issues
+      throw Exception('Failed to update order status: $e');
     }
   }
 
@@ -80,41 +120,13 @@ class OrderCard extends StatelessWidget {
               onPressed: (order.status == 'SELESAI' || order.status == 'DIBATALKAN')
                   ? null
                   : () async {
-                final newStatus = order.status == 'DIPESAN' ? 'DIPROSES' : 'SELESAI';
-                await updateOrderStatus(newStatus, order);
+                await _updateOrderStatus('SELESAI');
               },
-              child: Text('Selesaikan Pesanan'),
+              child: const Text('Selesaikan Pesanan'),
             ),
           ],
         ),
       ),
     );
-  }
-
-  Future<void> updateOrderStatus(String newStatus, Order order) async {
-    try {
-      // Fetch the data and handle the response
-      final response = await fetchData(
-        'order/edit_status_penjual/',
-        method: RequestMethod.post,
-        body: {
-          'order_id': order.id,
-          'order_status': newStatus,
-        },
-      );
-
-      // Check the response for success status
-      if (response['status'] == 'success') {
-        order.status = newStatus;
-        // Optionally, notify listeners or update the UI
-      } else {
-        // Handle specific error messages if available
-        final errorMessage = response['message'] ?? 'Failed to update order status';
-        throw Exception(errorMessage);
-      }
-    } catch (e) {
-      // Handle errors such as network issues
-      throw Exception('Failed to update order status: $e');
-    }
   }
 }
