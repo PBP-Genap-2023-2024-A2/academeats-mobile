@@ -80,8 +80,8 @@ class _LoginPageState extends State<LoginPage> {
                                 if (request.loggedIn) {
                                     String message = response['message'];
                                     String uname = response['username'];
-                                    User? user = context.watch<AuthProvider>().user;
                                     if (context.mounted) {
+                                        User? user = context.watch<AuthProvider>().user;
                                         if(user?.role == "penjual") {
                                             Navigator.pushReplacement(
                                                 context,

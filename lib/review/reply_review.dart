@@ -1,24 +1,23 @@
 import 'dart:convert';
 
-import 'package:academeats_mobile/models/makanan.dart';
-import 'package:academeats_mobile/pages/review/show_review.dart';
+import 'package:academeats_mobile/models/review.dart';
+import 'package:academeats_mobile/review/show_review.dart';
 import 'package:flutter/material.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
 
-class ReviewFormPage extends StatefulWidget {
-    final Makanan? makanans;
+class ReplyFormPage extends StatefulWidget {
+    final Review? reviews; // Tambahkan parameter untuk objek review
 
-    const ReviewFormPage({super.key, required this.makanans});
+    const ReplyFormPage({super.key, required this.reviews});
 
     @override
-    State<ReviewFormPage> createState() => _TrackerFormPageState();
+    State<ReplyFormPage> createState() => _TrackerFormPageState();
 }
 
-class _TrackerFormPageState extends State<ReviewFormPage> {
+class _TrackerFormPageState extends State<ReplyFormPage> {
     final _formKey = GlobalKey<FormState>();
-    String _komentar = "";
-    int _nilai = 0;
+    String _reply = "";
     @override
     Widget build(BuildContext context) {
         final request = context.watch<CookieRequest>();
@@ -26,7 +25,7 @@ class _TrackerFormPageState extends State<ReviewFormPage> {
           appBar: AppBar(
               title: const Center(
                   child: Text(
-                  'Create',
+                  'Reply Review',
                   ),
               ),
               backgroundColor: Colors.indigo,
@@ -42,51 +41,25 @@ class _TrackerFormPageState extends State<ReviewFormPage> {
                               padding: const EdgeInsets.all(8.0),
                               child: TextFormField(
                                   decoration: InputDecoration(
-                                      hintText: "Isi komentar",
-                                      labelText: "Komentar",
+                                      hintText: "Isi reply",
+                                      labelText: "Reply",
                                       border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(5.0),
                                       ),
                                   ),
                                   onChanged: (String? value) {
                                       setState(() {
-                                      _komentar = value!;
+                                      _reply = value!;
                                       });
                                   },
                                   validator: (String? value) {
                                       if (value == null || value.isEmpty) {
-                                      return "Komentar tidak boleh kosong!";
+                                      return "Reply tidak boleh kosong!";
                                       }
                                       return null;
                                   },
-                              ),    
-                          ),
-                          Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: TextFormField(
-                                  decoration: InputDecoration(
-                                      hintText: "1 - 5",
-                                      labelText: "Nilai",
-                                      border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(5.0),
-                                      ),
-                                  ),
-                                  onChanged: (String value) {
-                                      setState(() {
-                                      try {
-                                          _nilai = int.parse(value);
-                                      } catch (e) {
-                                          _nilai = 0;
-                                      }
-                                    });
-                                  },
-                                  validator: (String? value) {
-                                      if (_nilai <= 0 || _nilai >= 6) {
-                                      return "Nilai tidak valid";
-                                      }
-                                      return null;
-                                  },
-                              ),    
+                              ),
+                              
                           ),
                           Align(
                               alignment: Alignment.bottomCenter,
@@ -99,17 +72,17 @@ class _TrackerFormPageState extends State<ReviewFormPage> {
                                       onPressed: () async {
                                           if (_formKey.currentState!.validate()) {
                                             final response = await request.postJson(
-                                                "http://localhost:8000/review/api/v1/create/${widget.makanans!.id}",
+                                                "http://localhost:8000/review/api/v1/reply/${widget.reviews!.id}",
                                                 jsonEncode(<String, String>{
-                                                    'nilai': _nilai.toString(),
-                                                    'komentar': _komentar
+                                                    'reply': _reply
                                                 }),
                                             );
+                                            
                                             if (context.mounted) {
                                                 if (response['status'] == 'success') {
                                                     ScaffoldMessenger.of(context)
                                                         .showSnackBar(const SnackBar(
-                                                    content: Text("Komentar berhasil disimpan!"),
+                                                    content: Text("Reply berhasil disimpan!"),
                                                     ));
                                                     Navigator.pushReplacement(
                                                         context,
