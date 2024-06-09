@@ -3,6 +3,7 @@ import 'package:academeats_mobile/models/toko.dart';
 import 'package:academeats_mobile/models/user.dart';
 import 'package:academeats_mobile/pages/review/create_review.dart';
 import 'package:academeats_mobile/pages/review/reply_review.dart';
+import 'package:academeats_mobile/pages/user/login.dart';
 import 'package:academeats_mobile/utils/fetch.dart';
 import 'package:flutter/material.dart';
 
@@ -13,7 +14,7 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ReviewFormPage(makanans: Makanan(id: 2, nama: "pempek", harga: 3000, stok: 2, imgUrl: "", toko: Toko(id: 1, user: User (bio: "", id: 0, username: '', namaLengkap: '', namaPanggilan: ''), name: "Jl. Pempek", description: "Pempek Palembang")));
+    return ReviewFormPage(makanans: Makanan(id: 2, nama: "pempek", harga: 3000, stok: 2, imgUrl: "", toko: Toko(id: 1, user: User (bio: "", id: 0, username: '', namaLengkap: '', namaPanggilan: '', role: 'penjual'), name: "Jl. Pempek", description: "Pempek Palembang")));
   }
 }
 

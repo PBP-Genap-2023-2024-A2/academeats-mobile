@@ -1,6 +1,9 @@
 import 'package:academeats_mobile/auth/auth.dart';
+import 'package:academeats_mobile/models/cart.dart';
 import 'package:academeats_mobile/models/user.dart';
 import 'package:academeats_mobile/pages/home.dart';
+import 'package:academeats_mobile/pages/landing_page/pembeli.dart';
+import 'package:academeats_mobile/pages/landing_page/penjual.dart';
 import 'package:flutter/material.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
@@ -15,7 +18,13 @@ class LoginApp extends StatelessWidget {
             theme: ThemeData(
                 primarySwatch: Colors.blue,
             ),
-            home: const LoginPage(),
+            home: MultiProvider(
+        providers: [
+          Provider(create: (_) => AuthProvider()),
+          ChangeNotifierProvider(create: (_) => CartProvider()),
+        ],
+        child: const LoginPage(),
+      ),
         );
     }
 }
@@ -33,7 +42,7 @@ class _LoginPageState extends State<LoginPage> {
 
     @override
     Widget build(BuildContext context) {
-        final request = context.watch<CookieRequest>();
+        final request = context.watch<AuthProvider>();
         return Scaffold(
             appBar: AppBar(
                 title: const Text('Login'),
@@ -73,11 +82,17 @@ class _LoginPageState extends State<LoginPage> {
                                     String uname = response['username'];
                                     User? user = context.watch<AuthProvider>().user;
                                     if (context.mounted) {
-                                        if(user != null && user.role == ""
-                                        Navigator.pushReplacement(
-                                            context,
-                                            MaterialPageRoute(builder: (context) => const LandingPage()),
-                                        );
+                                        if(user?.role == "penjual") {
+                                            Navigator.pushReplacement(
+                                                context,
+                                                MaterialPageRoute(builder: (context) => LandingPagePenjual(user: user)),
+                                            );
+                                        } else {
+                                            Navigator.pushReplacement(
+                                                context,
+                                                MaterialPageRoute(builder: (context) => LandingPagePembeli(user: user)),
+                                            );
+                                        }
                                         ScaffoldMessenger.of(context)
                                             ..hideCurrentSnackBar()
                                             ..showSnackBar(

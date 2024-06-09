@@ -1,25 +1,10 @@
+import 'package:academeats_mobile/models/user.dart';
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(const MyApp());
-}
+class LandingPagePembeli extends StatelessWidget {
+  final User? user;
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      title: 'Academeats',
-      home: LandingPage(userName: 'User123'),
-    );
-  }
-}
-
-class LandingPage extends StatelessWidget {
-  final String userName;
-
-  const LandingPage({super.key, required this.userName});
+  const LandingPagePembeli({super.key, required this.user});
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +29,7 @@ class LandingPage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    'Welcome, $userName!',
+                    'Welcome, ${user?.username}!',
                     style: const TextStyle(
                       fontSize: 48,
                       fontWeight: FontWeight.bold,
