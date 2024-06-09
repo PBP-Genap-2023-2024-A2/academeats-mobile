@@ -11,19 +11,14 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     AuthProvider auth = context.watch<AuthProvider>();
 
-    String? userRole = auth.user?.role;// TODO: Example role, replace with actual logic
+    String userRole = auth.user?.role ?? "";// TODO: Example role, replace with actual logic
     print('HomeScreen userRole: $userRole'); // Debug statement
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Home Screen'),
-      ),
-      body: Container(
-        child: Column(
-          children: [
-            OrderScreen(userRole: userRole ?? ""),
-          ],
-        )
-      ),
+    return MultiProvider(
+      providers: [
+        Provider(create: (_) => AuthProvider()),
+        ChangeNotifierProvider(create: (_) => CartProvider()),
+      ],
+      child: OrderScreen(userRole),
     );
   }
 }
