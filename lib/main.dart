@@ -38,7 +38,7 @@ class MainApp extends StatelessWidget {
           Provider(create: (_) => AuthProvider()),
           ChangeNotifierProvider(create: (_) => CartProvider()),
         ],
-        child: const LandingPage(),
+        child: const HomeScreen(),
       ),
     );
   }

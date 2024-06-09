@@ -1,30 +1,30 @@
 import 'package:academeats_mobile/models/base_model.dart';
 
 class Forum implements ISendable {
-  int pk;
-  String name;
-  String description;
+  int id;
+  String judul;
+  String deskripsi;
   DateTime dateAdded;
 
   Forum({
-    required this.pk,
-    required this.name,
-    required this.description,
+    required this.id,
+    required this.judul,
+    required this.deskripsi,
     required this.dateAdded,
   });
 
   factory Forum.fromJson(Map<String, dynamic> json) => Forum(
-    pk: json["pk"],
-    name: json["name"],
-    description: json["description"],
-    dateAdded: DateTime.parse(json["date_added"]),
+    id: json["id"],
+    judul: json["judul"],
+    deskripsi: json["deskripsi"],
+    dateAdded: DateTime.parse(json["created_at"]),
   );
 
   @override
   Map<String, dynamic> toJson() => {
-    "pk": pk,
-    "name": name,
-    "description": description,
-    "date_added": "${dateAdded.year.toString().padLeft(4, '0')}-${dateAdded.month.toString().padLeft(2, '0')}-${dateAdded.day.toString().padLeft(2, '0')}",
+    "id": id,
+    "judul": judul,
+    "deskripsi": deskripsi,
+    "created_at": "${dateAdded.year.toString().padLeft(4, '0')}-${dateAdded.month.toString().padLeft(2, '0')}-${dateAdded.day.toString().padLeft(2, '0')}",
   };
 }
