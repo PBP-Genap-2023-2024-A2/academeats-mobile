@@ -1,6 +1,8 @@
 import 'package:academeats_mobile/models/user.dart';
 import 'package:flutter/material.dart';
 
+import '../../keranjang/keranjang_screen.dart';
+
 class LandingPagePembeli extends StatelessWidget {
   final User? user;
 
@@ -74,7 +76,20 @@ class ShowTokoPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Show Toko'),
+          title: const Text('Show Toko'),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.shopping_cart),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => KeranjangScreen(),
+                  ),
+                );
+              },
+            ),
+          ]
       ),
       body: const Center(
         child: Text('Show Toko Page'),

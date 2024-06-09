@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:academeats_mobile/models/toko.dart';
 import 'package:provider/provider.dart';
 import '../../auth/auth.dart';
+import '../../keranjang/keranjang_screen.dart';
 import '../../utils/fetch.dart';
 import 'order_screen_for_penjual.dart'; // Import your OrderScreenForPenjual here
 
@@ -16,7 +17,7 @@ class TokoScreenForPenjual extends StatelessWidget {
     String username = auth.user?.username ?? "";
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Toko'),
+          title: const Text('Daftar Tokomu'),
       ),
       body: FutureBuilder(
         future: fetchData('toko/api/v1/user/$username/'),

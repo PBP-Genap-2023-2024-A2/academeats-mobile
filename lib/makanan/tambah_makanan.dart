@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../keranjang/keranjang_screen.dart';
 import '../models/toko.dart';
 import '../models/makanan.dart';
 import '../utils/fetch.dart';
@@ -60,8 +61,20 @@ class _TambahMakananPageState extends State<TambahMakananPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Tambah Makanan'),
-        backgroundColor: const Color(0xFFF6E049),
+          title: const Text('Tambah Makanan'),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.shopping_cart),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => KeranjangScreen(),
+                  ),
+                );
+              },
+            ),
+          ]
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

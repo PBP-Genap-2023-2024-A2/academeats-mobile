@@ -3,6 +3,7 @@ import 'package:academeats_mobile/models/makanan.dart';
 import 'package:academeats_mobile/models/toko.dart';
 import 'package:academeats_mobile/utils/fetch.dart';
 
+import '../keranjang/keranjang_screen.dart';
 import '../toko/toko_detail.dart';
 import 'detail_makanan.dart';
 
@@ -66,6 +67,19 @@ class _SearchedMakananAndTokoScreenState
     return Scaffold(
       appBar: AppBar(
         title: Text('Search Results for "${widget.searchQuery}"'),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.shopping_cart),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => KeranjangScreen(),
+                  ),
+                );
+              },
+            ),
+          ]
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
