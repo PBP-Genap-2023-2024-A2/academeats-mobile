@@ -1,7 +1,8 @@
 import 'dart:convert';
 
+import 'package:academeats_mobile/auth/auth.dart';
 import 'package:academeats_mobile/models/makanan.dart';
-import 'package:academeats_mobile/pages/review/show_review.dart';
+import 'package:academeats_mobile/review/show_review.dart';
 import 'package:flutter/material.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
@@ -12,16 +13,16 @@ class ReviewFormPage extends StatefulWidget {
     const ReviewFormPage({super.key, required this.makanans});
 
     @override
-    State<ReviewFormPage> createState() => _TrackerFormPageState();
+    State<ReviewFormPage> createState() => _ReviewFormPageState();
 }
 
-class _TrackerFormPageState extends State<ReviewFormPage> {
+class _ReviewFormPageState extends State<ReviewFormPage> {
     final _formKey = GlobalKey<FormState>();
     String _komentar = "";
     int _nilai = 0;
     @override
     Widget build(BuildContext context) {
-        final request = context.watch<CookieRequest>();
+        final request = context.watch<AuthProvider>();
         return Scaffold(
           appBar: AppBar(
               title: const Center(

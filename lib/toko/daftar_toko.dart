@@ -6,8 +6,8 @@ import '../makanan/main_makanan.dart';
 import '../models/toko.dart';
 import 'toko_detail.dart';
 
-class TokoHomeScreen extends StatelessWidget {
-  const TokoHomeScreen({super.key});
+class DaftarToko extends StatelessWidget {
+  const DaftarToko({super.key});
 
   @override
   Widget build(BuildContext context) {

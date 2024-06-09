@@ -98,3 +98,13 @@ Future<Map<String, dynamic>> fetchData(String path,
 
   return returned;
 }
+
+Future<Map<String, dynamic>> postData(String path, Map<String, dynamic> body, {User? user}) async {
+  return await fetchData(
+    path,
+    method: RequestMethod.post,
+    dataType: RequestDataType.json,
+    body: body,
+    user: user,
+  );
+}
