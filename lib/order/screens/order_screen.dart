@@ -1,8 +1,7 @@
+import 'package:academeats_mobile/order/screens/toko_screen_for_penjual.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import '../providers/order_provider.dart';
 import 'order_screen_for_penjual.dart';
-import 'order_pembeli_screen.dart';
+import 'order_screen_for_pembeli.dart';
 
 class OrderScreen extends StatelessWidget {
   final String userRole;
@@ -11,16 +10,20 @@ class OrderScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('OrderScreen userRole: $userRole'); // Debug statement
     if (userRole == 'Penjual') {
-      return const OrderScreenForPenjual();
+      // TODO: get the actual tokoId
+      final int tokoId = 1;
+      return TokoScreenForPenjual();
+      //return OrderScreenForPenjual(tokoId);
     } else if (userRole == 'Pembeli') {
-      return Consumer<OrderProvider>(
-        builder: (context, orderProvider, child) {
-          return OrderPembeliScreen(orderGroup: orderProvider.orderGroups);
-        },
-      );
+      // TODO: get the actual ogId
+      final int ogId = 1;
+      return OrderScreenForPembeli();
     } else {
-      return const Scaffold(body: Center(child: Text('Unknown user role')));
+      return const Scaffold(
+        body: Center(child: Text('Unknown user role')),
+      );
     }
   }
 }
