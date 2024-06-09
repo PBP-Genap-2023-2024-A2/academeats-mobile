@@ -1,10 +1,11 @@
-import 'package:academeats_mobile/pages/user/login.dart';
+import 'package:academeats_mobile/models/user.dart';
 import 'package:flutter/material.dart';
 
 
+class LandingPagePenjual extends StatelessWidget {
+  final User? user;
 
-class LandingPage extends StatelessWidget {
-  const LandingPage({super.key});
+  const LandingPagePenjual({super.key, required this.user});
 
   @override
   Widget build(BuildContext context) {
@@ -26,9 +27,9 @@ class LandingPage extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text(
-                  'Academeats',
-                  style: TextStyle(
+                Text(
+                  'Welcome, ${user?.username}!',
+                  style: const TextStyle(
                     fontSize: 48,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
@@ -37,7 +38,7 @@ class LandingPage extends StatelessWidget {
                 ),
                 const SizedBox(height: 20),
                 const Text(
-                  'Memesan makanan semudah membalikkan telapak tangan. Daftar sekarang dan nikmati kemudahannya.',
+                  'Nikmati kemudahan dalam memasarkan makanan dengan Academeats. Mulai promosikan makanan Anda sekarang juga!',
                   style: TextStyle(
                     fontSize: 18,
                     color: Colors.white,
@@ -47,13 +48,13 @@ class LandingPage extends StatelessWidget {
                 const SizedBox(height: 40),
                 ElevatedButton(
                   onPressed: () {
-                    // Navigate to the login page
+                    // Navigate to the manage page
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => LoginApp()),
+                      MaterialPageRoute(builder: (context) => const ManagePage()),
                     );
                   },
-                  child: const Text('Daftar Sekarang'),
+                  child: const Text('Mulai Menjual'),
                 ),
               ],
             ),
@@ -64,15 +65,17 @@ class LandingPage extends StatelessWidget {
   }
 }
 
-class LoginPage extends StatelessWidget {
+class ManagePage extends StatelessWidget {
+  const ManagePage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Login'),
+        title: const Text('Manage'),
       ),
       body: const Center(
-        child: Text('Login Page'),
+        child: Text('Manage Page'),
       ),
     );
   }
