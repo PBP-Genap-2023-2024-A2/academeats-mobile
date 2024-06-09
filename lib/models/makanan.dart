@@ -1,8 +1,9 @@
-import 'package:academeats_mobile/models/base_model.dart';
 import 'package:academeats_mobile/models/toko.dart';
 
+import 'base_model.dart';
+
 class Makanan implements ISendable {
-  int pk;
+  int id;
   String nama;
   double harga;
   int stok;
@@ -10,7 +11,7 @@ class Makanan implements ISendable {
   Toko toko;
 
   Makanan({
-    required this.pk,
+    required this.id,
     required this.nama,
     required this.harga,
     required this.stok,
@@ -19,16 +20,16 @@ class Makanan implements ISendable {
   });
 
   factory Makanan.fromJson(Map<String, dynamic> json) => Makanan(
-    pk: json['pk'] ?? 0,
+    id: json['id'],
     nama: json['nama'],
     harga: json['harga'],
     stok: json['stok'] ?? 0,
     imgUrl: json['img_url'],
     toko: Toko.fromJson(json['toko']),
   );
-
+  
   Map<String, dynamic> toJson() => {
-    'pk': pk,
+    'id': id,
     'nama': nama,
     'harga': harga,
     'stok': stok,

@@ -1,22 +1,39 @@
 import 'dart:collection';
 
 import 'package:academeats_mobile/models/makanan.dart';
+import 'package:academeats_mobile/models/user.dart';
+import 'package:academeats_mobile/utils/fetch.dart';
 import 'package:flutter/material.dart';
 
 import 'package:academeats_mobile/models/base_model.dart';
 
-class Cart extends ChangeNotifier {
+class CartProvider extends ChangeNotifier {
   final List<CartObject> _items = [];
+  double totalHarga = 0;
 
   UnmodifiableListView<CartObject> get items => UnmodifiableListView(_items);
 
   void add(CartObject item) {
     _items.add(item);
+    totalHarga += item.makanan.harga * item.jumlah;
     notifyListeners();
   }
 
   void remove(CartObject item) {
     _items.remove(item);
+    totalHarga -= item.makanan.harga * item.jumlah;
+    notifyListeners();
+  }
+
+  void fetchCart(User user) async {
+    var keranjangData = await fetchData('keranjang/api/v1/get-keranjang-item/${user.username}/');
+
+    for (CartObject item in keranjangData['data']) {
+      add(item);
+    }
+  }
+
+  void ngasal() {
     notifyListeners();
   }
 }

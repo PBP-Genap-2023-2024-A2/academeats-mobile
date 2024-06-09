@@ -1,21 +1,42 @@
+import 'package:academeats_mobile/auth/auth.dart';
 import 'package:flutter/material.dart';
-import 'order/screens/home_screen.dart';
+import 'package:provider/provider.dart';
+import 'package:academeats_mobile/pages/home.dart';
+
+import 'package:academeats_mobile/models/cart.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const MainApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class MainApp extends StatelessWidget {
+  const MainApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Order Management',
+      title: 'AcademEats',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        colorScheme: const ColorScheme(
+            primary: Color.fromRGBO(246, 224, 73, 1),
+            secondary: Color.fromRGBO(224, 113, 158, 1),
+            surface: Colors.white60,
+            background: Colors.white,
+            brightness: Brightness.light,
+            error: Color.fromRGBO(220, 53, 69, 1),
+            onBackground: Colors.black87,
+            onPrimary: Colors.black87,
+            onSecondary: Colors.white70,
+            onError: Colors.white,
+            onSurface: Colors.black87),
       ),
-      home: const HomeScreen(),
+      home: MultiProvider(
+        providers: [
+          Provider(create: (_) => AuthProvider()),
+          ChangeNotifierProvider(create: (_) => CartProvider()),
+        ],
+        child: const HomeScreen(),
+      ),
     );
   }
 }
