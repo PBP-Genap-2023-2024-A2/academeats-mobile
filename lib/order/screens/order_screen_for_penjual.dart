@@ -10,9 +10,7 @@ class OrderScreenForPenjual extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Order'),
-      ),
+      appBar: AppBar(title: const Text('Order')),
       body: FutureBuilder(
         future: fetchData('order/api/v1/$tokoId/orders'),
         builder: (context, snapshot) {
@@ -21,18 +19,29 @@ class OrderScreenForPenjual extends StatelessWidget {
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else {
-            return GridView.builder(
-              padding: const EdgeInsets.all(16),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3,
-                mainAxisSpacing: 10,
-                crossAxisSpacing: 10,
+            return SingleChildScrollView(
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: GridView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2, // Adjusted for better layout
+                        mainAxisSpacing: 10,
+                        crossAxisSpacing: 10,
+                        childAspectRatio: 0.75, // Adjusted for better layout
+                      ),
+                      itemCount: snapshot.data!['data'].length,
+                      itemBuilder: (context, index) {
+                        final order = Order.fromJson(snapshot.data!['data'][index]);
+                        return OrderCard(order: order);
+                      },
+                    ),
+                  ),
+                ],
               ),
-              itemCount: snapshot.data!['data'].length,
-              itemBuilder: (context, index) {
-                final order = Order.fromJson(snapshot.data!['data'][index]);
-                return OrderCard(order: order);
-              },
             );
           }
         },
@@ -74,7 +83,6 @@ class _OrderCardState extends State<OrderCard> {
 
   Future<void> _updateOrderStatus(String newStatus) async {
     try {
-      // Fetch the data and handle the response
       final response = await fetchData(
         'order/edit_status_penjual/',
         method: RequestMethod.post,
@@ -84,18 +92,15 @@ class _OrderCardState extends State<OrderCard> {
         },
       );
 
-      // Check the response for success status
       if (response['status'] == 'success') {
         setState(() {
           order.status = newStatus;
         });
       } else {
-        // Handle specific error messages if available
         final errorMessage = response['message'] ?? 'Failed to update order status';
         throw Exception(errorMessage);
       }
     } catch (e) {
-      // Handle errors such as network issues
       throw Exception('Failed to update order status: $e');
     }
   }

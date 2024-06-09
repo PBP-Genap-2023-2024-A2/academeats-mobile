@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:academeats_mobile/makanan/detail_makanan.dart';
 import 'package:academeats_mobile/utils/fetch.dart';
+import '../keranjang/keranjang_screen.dart';
 import '../models/makanan.dart';
 import 'searched_makanan_and_toko.dart'; // Import the new screen
 
@@ -31,6 +32,19 @@ class _TestWidgetState extends State<TestWidget> {
         slivers: [
           SliverAppBar(
             title: const Text('Food'),
+            actions: [
+              IconButton(
+                icon: const Icon(Icons.shopping_cart),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => KeranjangScreen(),
+                    ),
+                  );
+                },
+              ),
+            ],
             backgroundColor: const Color(0xFFF6E049),
             pinned: true,
             expandedHeight: 120,

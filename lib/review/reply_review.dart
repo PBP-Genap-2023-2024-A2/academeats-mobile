@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
 
+import '../keranjang/keranjang_screen.dart';
+
 class ReplyFormPage extends StatefulWidget {
     final Review? reviews; // Tambahkan parameter untuk objek review
 
@@ -29,6 +31,19 @@ class _ReplyFormPageState extends State<ReplyFormPage> {
                   'Reply Review',
                   ),
               ),
+              actions: [
+                  IconButton(
+                      icon: const Icon(Icons.shopping_cart),
+                      onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => KeranjangScreen(),
+                              ),
+                          );
+                      },
+                  ),
+              ],
               backgroundColor: Colors.indigo,
               foregroundColor: Colors.white,
               ),

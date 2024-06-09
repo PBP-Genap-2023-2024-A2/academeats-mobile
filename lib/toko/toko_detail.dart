@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../keranjang/keranjang_screen.dart';
 import '../makanan/detail_makanan.dart';
 import '../makanan/tambah_makanan.dart';
 import '../models/makanan.dart';
@@ -63,6 +64,19 @@ class _TokoDetailScreenState extends State<TokoDetailScreen> {
       appBar: AppBar(
         title: Text(widget.toko.name),
         backgroundColor: const Color(0xFFF6E049),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.shopping_cart),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => KeranjangScreen(),
+                  ),
+                );
+              },
+            ),
+          ]
       ),
       body: FutureBuilder<Map<String, dynamic>>(
         future: _makananFuture,

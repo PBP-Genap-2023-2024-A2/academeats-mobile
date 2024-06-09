@@ -1,6 +1,8 @@
 import 'package:academeats_mobile/models/user.dart';
 import 'package:flutter/material.dart';
 
+import '../../keranjang/keranjang_screen.dart';
+
 
 class LandingPagePenjual extends StatelessWidget {
   final User? user;
@@ -72,7 +74,20 @@ class ManagePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Manage'),
+          title: const Text('Manage'),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.shopping_cart),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => KeranjangScreen(),
+                  ),
+                );
+              },
+            ),
+          ]
       ),
       body: const Center(
         child: Text('Manage Page'),
