@@ -199,17 +199,33 @@ class OrderGroupCard extends StatelessWidget {
       );
 
       if (response['status'] == 'success') {
+        await _returnStock(og);
         for (Order order in og.orders) {
+          // Fetch the makanan stock update API
           order.status = "DIBATALKAN";
         }
-        // Optionally, notify listeners or update the UI
       } else {
         final errorMessage = response['message'] ?? 'Failed to update order status';
         throw Exception(errorMessage);
       }
     } catch (e) {
-      // Handle errors such as network issues
       throw Exception('Failed to update order status: $e');
+    }
+  }
+
+  Future<void> _returnStock(OrderGroup orderGroup) async {
+    try {
+      final response = await fetchData(
+        'order/return_stok/${orderGroup.id}',
+        method: RequestMethod.post,
+      );
+
+      if (response['status'] != 'success') {
+        final errorMessage = response['message'] ?? 'Failed to return stock';
+        throw Exception(errorMessage);
+      }
+    } catch (e) {
+      throw Exception('Failed to return stock: $e');
     }
   }
 }
