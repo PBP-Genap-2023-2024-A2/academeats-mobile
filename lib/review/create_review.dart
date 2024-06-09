@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:academeats_mobile/auth/auth.dart';
 import 'package:academeats_mobile/models/makanan.dart';
 import 'package:academeats_mobile/review/show_review.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +22,7 @@ class _ReviewFormPageState extends State<ReviewFormPage> {
     int _nilai = 0;
     @override
     Widget build(BuildContext context) {
-        final request = context.watch<CookieRequest>();
+        final request = context.watch<AuthProvider>();
         return Scaffold(
           appBar: AppBar(
               title: const Center(
