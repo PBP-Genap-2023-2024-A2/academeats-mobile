@@ -78,6 +78,10 @@ class _ReviewPageState extends State<ReviewPage> {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else if (snapshot.hasData) {
             List<Review?> reviews = snapshot.data!;
+            List<Review?> filteredReviews = reviews.where((review) => review?.makanan?.id == widget.makanans?.id).toList();
+            if (filteredReviews.isEmpty) {
+              return const Center(child: Text('No reviews found.'));
+            }
             return ListView.builder(
               itemCount: reviews.length,
               itemBuilder: (context, index) {

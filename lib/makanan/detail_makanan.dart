@@ -1,3 +1,4 @@
+import 'package:academeats_mobile/review/show_review.dart';
 import 'package:flutter/material.dart';
 import '../keranjang/keranjang_screen.dart';
 import '../models/makanan.dart'; // Adjust the import path accordingly
@@ -104,6 +105,16 @@ class FoodDetailScreen extends StatelessWidget {
                                   0xFF5A2D3F), // Secondary text emphasis color
                             ),
                       ),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => ReviewPage(makanans: fetchedMakanan,)),
+                        );
+                      },
+                      style: TextButton.styleFrom(foregroundColor: Colors.grey, backgroundColor: Colors.yellow),
+                      child: const Text('Lihat Review'),
                     ),
                     const SizedBox(height: 20),
                   ],
