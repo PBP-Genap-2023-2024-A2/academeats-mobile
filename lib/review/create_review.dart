@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
 
+import '../keranjang/keranjang_screen.dart';
+
 class ReviewFormPage extends StatefulWidget {
     final Makanan? makanans;
 
@@ -27,9 +29,22 @@ class _ReviewFormPageState extends State<ReviewFormPage> {
           appBar: AppBar(
               title: const Center(
                   child: Text(
-                  'Create',
+                  'Create Review',
                   ),
               ),
+              actions: [
+                  IconButton(
+                      icon: const Icon(Icons.shopping_cart),
+                      onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => KeranjangScreen(),
+                              ),
+                          );
+                      },
+                  ),
+              ],
               backgroundColor: Colors.indigo,
               foregroundColor: Colors.white,
               ),

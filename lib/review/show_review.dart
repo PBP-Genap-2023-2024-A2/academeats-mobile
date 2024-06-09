@@ -7,6 +7,7 @@ import 'package:academeats_mobile/pages/user/login.dart';
 import 'package:academeats_mobile/utils/fetch.dart';
 import 'package:flutter/material.dart';
 
+import '../keranjang/keranjang_screen.dart';
 import '../models/review.dart';
 class ReviewPage extends StatefulWidget {
   const ReviewPage({super.key});
@@ -49,7 +50,21 @@ class _ReviewPageState extends State<ReviewPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Reviews'),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.shopping_cart),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => KeranjangScreen(),
+                  ),
+                );
+              },
+            ),
+          ]
       ),
+
       body: FutureBuilder<List<Review?>>(
         future: futureReviews,
         builder: (context, snapshot) {

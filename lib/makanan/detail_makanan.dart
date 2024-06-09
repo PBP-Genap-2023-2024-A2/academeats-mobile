@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../keranjang/keranjang_screen.dart';
 import '../models/makanan.dart'; // Adjust the import path accordingly
 import 'package:academeats_mobile/utils/fetch.dart';
 
@@ -14,7 +15,20 @@ class FoodDetailScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(makanan.nama),
-        backgroundColor: const Color(0xFFF6E049), // Primary color
+        backgroundColor: const Color(0xFFF6E049),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.shopping_cart),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => KeranjangScreen(),
+                  ),
+                );
+              },
+            ),
+          ]// Primary color
       ),
       body: FutureBuilder<Map<String, dynamic>>(
         future: fetchData('makanan/api/v1/${makanan.id}'),

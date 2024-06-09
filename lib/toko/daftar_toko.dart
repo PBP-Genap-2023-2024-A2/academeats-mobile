@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:academeats_mobile/utils/fetch.dart';
 import 'package:academeats_mobile/makanan/edit.dart' as edit;
 
+import '../keranjang/keranjang_screen.dart';
 import '../makanan/main_makanan.dart';
 import '../models/toko.dart';
 import 'toko_detail.dart';
@@ -31,7 +32,20 @@ class _TestWidgetState extends State<TestWidget> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Toko'),
-        backgroundColor: const Color(0xFFF6E049), // Primary color
+        backgroundColor: const Color(0xFFF6E049),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.shopping_cart),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => KeranjangScreen(),
+                  ),
+                );
+              },
+            ),
+          ]// Primary color
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
