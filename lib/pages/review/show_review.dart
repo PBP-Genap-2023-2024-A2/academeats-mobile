@@ -13,7 +13,7 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ReviewFormPage(makanans: Makanan(id: 2, nama: "pempek", harga: 3000, stok: 2, imgUrl: "", toko: Toko(id: 1, user: User (bio: "", id: 0, username: '', namaLengkap: '', namaPanggilan: ''), name: "Jl. Pempek", description: "Pempek Palembang")));
+    return ReviewFormPage(makanans: Makanan(id: 2, nama: "pempek", harga: 3000, stok: 2, imgUrl: "", toko: Toko(id: 1, user: User (bio: "", id: 0, username: '', namaLengkap: '', namaPanggilan: '', role: ''), name: "Jl. Pempek", description: "Pempek Palembang")));
   }
 }
 

@@ -1,5 +1,7 @@
 import 'package:academeats_mobile/models/toko.dart';
 
+import 'base_model.dart';
+
 class Makanan implements ISendable {
   int id;
   String nama;
