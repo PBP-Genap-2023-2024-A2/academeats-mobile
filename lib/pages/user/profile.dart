@@ -145,7 +145,7 @@ class _AddSaldoDialogState extends State<AddSaldoDialog> {
           ),
           const SizedBox(height: 5),
           const Align(
-            alignment: Alignment.centerLeft, // Add this line
+            alignment: Alignment.centerLeft, // Add this linecontext.watch<AuthProvider>()
             child: Text('Biaya admin: 1000'),
           ),
         ],
@@ -166,13 +166,7 @@ class _AddSaldoDialogState extends State<AddSaldoDialog> {
             });
             int? amount = int.tryParse(_controller.text);
             if (amount != null && amount >= 10000) {
-              fetchData(
-                'u/api/v1/top-up/', 
-                method: RequestMethod.post, 
-                body: {
-                      'username': user?.username ?? '',
-                      'jumlah': amount,
-                    });
+              context.read<AuthProvider>().increaseSaldo(amount);
               Navigator.of(context).pop();
             } else {
               setState(() {
