@@ -1,10 +1,12 @@
+import 'package:academeats_mobile/utils/fetch.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import '../providers/order_provider.dart';
-import '../models/order.dart';
+import '../../models/order.dart';
+
 
 class OrderScreenForPenjual extends StatelessWidget {
-  const OrderScreenForPenjual({Key? key}) : super(key: key);
+  final int tokoId;
+
+  OrderScreenForPenjual(this.tokoId, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -12,21 +14,28 @@ class OrderScreenForPenjual extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Order'),
       ),
-      body: Consumer<OrderProvider>(
-        builder: (context, orderProvider, child) {
-          return GridView.builder(
-            padding: const EdgeInsets.all(16),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 3,
-              mainAxisSpacing: 10,
-              crossAxisSpacing: 10,
-            ),
-            itemCount: orderProvider.orders.length,
-            itemBuilder: (context, index) {
-              final order = orderProvider.orders[index];
-              return OrderCard(order: order);
-            },
-          );
+      body: FutureBuilder(
+        future: fetchData('order/api/v1/$tokoId/orders'),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else {
+            return GridView.builder(
+              padding: const EdgeInsets.all(16),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 3,
+                mainAxisSpacing: 10,
+                crossAxisSpacing: 10,
+              ),
+              itemCount: snapshot.data!['data'].length,
+              itemBuilder: (context, index) {
+                final order = Order.fromJson(snapshot.data!['data'][index]);
+                return OrderCard(order: order);
+              },
+            );
+          }
         },
       ),
     );
@@ -53,8 +62,6 @@ class OrderCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final orderProvider = Provider.of<OrderProvider>(context, listen: false);
-
     return Card(
       color: _getCardColor(order.status),
       child: Padding(
@@ -70,20 +77,44 @@ class OrderCard extends StatelessWidget {
             Text('Status: ${order.status}'),
             const Spacer(),
             ElevatedButton(
-              onPressed: order.status == 'SELESAI'
+              onPressed: (order.status == 'SELESAI' || order.status == 'DIBATALKAN')
                   ? null
                   : () async {
-                final newStatus =
-                order.status == 'DIPESAN' ? 'DIPROSES' : 'SELESAI';
-                await orderProvider.updateOrderStatus(order.pk, newStatus);
+                final newStatus = order.status == 'DIPESAN' ? 'DIPROSES' : 'SELESAI';
+                await updateOrderStatus(newStatus, order);
               },
-              child: Text(order.status == 'DIPESAN'
-                  ? 'Proses Pesanan'
-                  : 'Selesaikan Pesanan'),
+              child: Text('Selesaikan Pesanan'),
             ),
           ],
         ),
       ),
     );
+  }
+
+  Future<void> updateOrderStatus(String newStatus, Order order) async {
+    try {
+      // Fetch the data and handle the response
+      final response = await fetchData(
+        'order/edit_status_penjual/',
+        method: RequestMethod.post,
+        body: {
+          'order_id': order.id,
+          'order_status': newStatus,
+        },
+      );
+
+      // Check the response for success status
+      if (response['status'] == 'success') {
+        order.status = newStatus;
+        // Optionally, notify listeners or update the UI
+      } else {
+        // Handle specific error messages if available
+        final errorMessage = response['message'] ?? 'Failed to update order status';
+        throw Exception(errorMessage);
+      }
+    } catch (e) {
+      // Handle errors such as network issues
+      throw Exception('Failed to update order status: $e');
+    }
   }
 }
