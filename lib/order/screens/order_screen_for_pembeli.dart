@@ -1,5 +1,8 @@
 import 'package:academeats_mobile/utils/fetch.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../../auth/auth.dart';
+import '../../keranjang/keranjang_screen.dart';
 import '../../models/order_group.dart';
 import '../../models/order.dart';
 import '../../review/create_review.dart';
@@ -16,22 +19,39 @@ class _OrderScreenForPembeliState extends State<OrderScreenForPembeli> {
 
   @override
   void initState() {
+    AuthProvider auth = Provider.of<AuthProvider>(context, listen: false);
+    String username = auth.user?.username ?? "";
     super.initState();
-    _fetchOrderData();
+    _fetchOrderData(username);
   }
 
-  void _fetchOrderData() {
+  void _fetchOrderData(String username) {
     setState(() {
-      _orderData = fetchData('order/api/v1/flutter_get_og_by_user/test/1/');
+      _orderData = fetchData('order/api/v1/flutter_get_og_by_user/$username/');
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    AuthProvider auth = context.watch<AuthProvider>();
+    String username = auth.user?.username ?? "";
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Order'),
-      ),
+          title: const Text('Order'),
+          actions: [
+      IconButton(
+      icon: const Icon(Icons.shopping_cart),
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => KeranjangScreen(),
+          ),
+        );
+      },
+    ),
+    ]
+    ),
       body: FutureBuilder(
         future: _orderData,
         builder: (context, snapshot) {
@@ -49,9 +69,10 @@ class _OrderScreenForPembeliState extends State<OrderScreenForPembeli> {
               itemCount: orderGroups.length,
               itemBuilder: (context, index) {
                 final orderGroup = orderGroups[index];
+
                 return OrderGroupCard(
                   orderGroup: orderGroup,
-                  onOrderCanceled: _fetchOrderData,
+                  onOrderCanceled: () => _fetchOrderData(username), // Pass the function as a callback
                 );
               },
             );
@@ -178,17 +199,33 @@ class OrderGroupCard extends StatelessWidget {
       );
 
       if (response['status'] == 'success') {
+        await _returnStock(og);
         for (Order order in og.orders) {
+          // Fetch the makanan stock update API
           order.status = "DIBATALKAN";
         }
-        // Optionally, notify listeners or update the UI
       } else {
         final errorMessage = response['message'] ?? 'Failed to update order status';
         throw Exception(errorMessage);
       }
     } catch (e) {
-      // Handle errors such as network issues
       throw Exception('Failed to update order status: $e');
+    }
+  }
+
+  Future<void> _returnStock(OrderGroup orderGroup) async {
+    try {
+      final response = await fetchData(
+        'order/return_stok/${orderGroup.id}',
+        method: RequestMethod.post,
+      );
+
+      if (response['status'] != 'success') {
+        final errorMessage = response['message'] ?? 'Failed to return stock';
+        throw Exception(errorMessage);
+      }
+    } catch (e) {
+      throw Exception('Failed to return stock: $e');
     }
   }
 }

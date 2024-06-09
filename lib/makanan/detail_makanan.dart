@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import '../models/makanan.dart'; // Adjust the import path accordingly
 import 'package:academeats_mobile/utils/fetch.dart';
 
+import '../toko/toko_detail.dart';
+
 class FoodDetailScreen extends StatelessWidget {
   final Makanan makanan; // Define a property to hold the Makanan object
 
@@ -39,13 +41,16 @@ class FoodDetailScreen extends StatelessWidget {
                   children: [
                     // Display the makanan image using the img_url
                     Container(
-                      height: 800, // Make the image taller
+                      height: 400, // Make the image taller
                       width: double.infinity,
                       decoration: BoxDecoration(
-                        color: const Color(0xFFE0719E), // Pink color
-                        borderRadius: BorderRadius.circular(20), // Larger border radius for a more squared look
+                        color: const Color(0xFFE0719E),
+                        // Pink color
+                        borderRadius: BorderRadius.circular(20),
+                        // Larger border radius for a more squared look
                         image: DecorationImage(
-                          image: NetworkImage(fetchedMakanan.imgUrl ?? 'https://via.placeholder.com/150'),
+                          image: NetworkImage(fetchedMakanan.imgUrl ??
+                              'https://via.placeholder.com/150'),
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -54,29 +59,36 @@ class FoodDetailScreen extends StatelessWidget {
                     Text(
                       fetchedMakanan.nama,
                       style: Theme.of(context).textTheme.headline5?.copyWith(
-                        color: const Color(0xFF625A1D), // Primary text emphasis color
-                        fontWeight: FontWeight.bold,
-                      ),
+                            color: const Color(0xFF625A1D),
+                            // Primary text emphasis color
+                            fontWeight: FontWeight.bold,
+                          ),
                     ),
                     const SizedBox(height: 10),
                     Text(
                       'Harga: ${fetchedMakanan.harga}',
                       style: Theme.of(context).textTheme.subtitle1?.copyWith(
-                        color: const Color(0xFF383A48), // Body color
-                      ),
+                            color: const Color(0xFF383A48), // Body color
+                          ),
                     ),
                     const SizedBox(height: 10),
                     Text(
                       'Stok: ${fetchedMakanan.stok}',
                       style: Theme.of(context).textTheme.subtitle1?.copyWith(
-                        color: const Color(0xFF383A48), // Body color
-                      ),
+                            color: const Color(0xFF383A48), // Body color
+                          ),
                     ),
                     const SizedBox(height: 10),
-                    Text(
-                      'Toko: ${fetchedMakanan.toko.name}',
-                      style: Theme.of(context).textTheme.subtitle2?.copyWith(
-                        color: const Color(0xFF5A2D3F), // Secondary text emphasis color
+                    InkWell(
+                      onTap: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => TokoDetailScreen(toko: fetchedMakanan.toko) ));
+                      },
+                      child: Text(
+                        'Toko: ${fetchedMakanan.toko.name}',
+                        style: Theme.of(context).textTheme.subtitle2?.copyWith(
+                              color: const Color(
+                                  0xFF5A2D3F), // Secondary text emphasis color
+                            ),
                       ),
                     ),
                     const SizedBox(height: 20),
