@@ -54,13 +54,9 @@ class _HomeScreenState extends State<HomeScreen> {
         },
         destinations: const [
           NavigationDestination(icon: Icon(Icons.home_filled), label: "Home",),
-<<<<<<< HEAD
-          NavigationDestination(icon: Icon(Icons.home_filled), label: "Home",),
-=======
           NavigationDestination(icon: Icon(Icons.shop), label: "Toko",),
           NavigationDestination(icon: Icon(Icons.history), label: "Order",),
           NavigationDestination(icon: Icon(Icons.person_rounded), label: "Profile")
->>>>>>> main
         ],
       ),
       body: _pageList[_currentPageIndex],
