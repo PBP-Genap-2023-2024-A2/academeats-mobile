@@ -15,7 +15,7 @@ class Toko implements ISendable {
   });
 
   factory Toko.fromJson(Map<String, dynamic> json) => Toko(
-    id: json['id'],
+    id: json['id'] ?? 0,
     user: User.fromJson(json['user']),
     name: json['name'],
     description: json['description'],

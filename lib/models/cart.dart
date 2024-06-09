@@ -32,6 +32,10 @@ class CartProvider extends ChangeNotifier {
       add(item);
     }
   }
+
+  void ngasal() {
+    notifyListeners();
+  }
 }
 
 class CartObject implements ISendable {

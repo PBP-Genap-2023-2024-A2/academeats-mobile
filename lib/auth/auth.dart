@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 
 import 'package:academeats_mobile/models/user.dart';
@@ -7,10 +9,12 @@ class AuthProvider extends CookieRequest {
 
   @override
   Future<dynamic> login(String url, dynamic data) async {
-    var body = await super.login(url, data);
+    final responseJson = await super.login(url, data);
 
-    user = User.fromJson(body);
+    if (loggedIn) {
+      user = User.fromJson(getJsonData());
+    }
 
-    return body;
+    return responseJson;
   }
 }
