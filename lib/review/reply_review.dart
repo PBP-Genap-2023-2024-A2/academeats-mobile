@@ -12,10 +12,10 @@ class ReplyFormPage extends StatefulWidget {
     const ReplyFormPage({super.key, required this.reviews});
 
     @override
-    State<ReplyFormPage> createState() => _TrackerFormPageState();
+    State<ReplyFormPage> createState() => _ReplyFormPageState();
 }
 
-class _TrackerFormPageState extends State<ReplyFormPage> {
+class _ReplyFormPageState extends State<ReplyFormPage> {
     final _formKey = GlobalKey<FormState>();
     String _reply = "";
     @override
