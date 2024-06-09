@@ -1,7 +1,10 @@
+import 'package:academeats_mobile/pages/home.dart';
 import 'package:academeats_mobile/auth/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:academeats_mobile/pages/home.dart';
+import 'package:academeats_mobile/pages/user/login.dart';
+
+//Ngetes doang, nanti ganti lagi jadi home.dart
 
 import 'package:academeats_mobile/models/cart.dart';
 
@@ -35,7 +38,7 @@ class MainApp extends StatelessWidget {
           Provider(create: (_) => AuthProvider()),
           ChangeNotifierProvider(create: (_) => CartProvider()),
         ],
-        child: const HomeScreen(),
+        child: const LandingPage(),
       ),
     );
   }
