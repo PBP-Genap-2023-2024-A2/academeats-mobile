@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../order/providers/order_provider.dart';
-import '../order/models/order_group.dart';
-import '../order/models/order.dart';
+import '../../models/order_group.dart';
+import '../../models/order.dart';
 import '../order/screens/order_screen.dart';
 import '../order/screens/home_screen.dart';
+import 'auth/auth.dart';
 
 void main() {
   runApp(const MyApp());
@@ -35,9 +36,10 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // For the purpose of this example, we'll use a hardcoded user role.
-    // In a real application, you might fetch this from a backend or user preferences.
-    String userRole = 'Penjual'; // or 'Pembeli'
+    // TODO: fetch user role properly
+    //AuthProvider auth = context.watch<AuthProvider>();
+    //String userRole = auth.user!.role;
+    String userRole = 'Penjual';
 
     return OrderScreen(userRole: userRole);
   }

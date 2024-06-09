@@ -1,3 +1,4 @@
+import 'package:academeats_mobile/models/base_model.dart';
 import 'package:academeats_mobile/models/toko.dart';
 
 import 'base_model.dart';
@@ -23,7 +24,7 @@ class Makanan implements ISendable {
     id: json['id'],
     nama: json['nama'],
     harga: json['harga'],
-    stok: json['stok'],
+    stok: json['stok'] ?? 0,
     imgUrl: json['img_url'],
     toko: Toko.fromJson(json['toko']),
   );

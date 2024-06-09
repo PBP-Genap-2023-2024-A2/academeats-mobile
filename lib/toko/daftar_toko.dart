@@ -6,8 +6,13 @@ import '../makanan/main_makanan.dart';
 import '../models/toko.dart';
 import 'toko_detail.dart';
 
+<<<<<<< HEAD:lib/toko/daftar_toko.dart
 class DaftarToko extends StatelessWidget {
   const DaftarToko({super.key});
+=======
+class TokoHomeScreen extends StatelessWidget {
+  const TokoHomeScreen({super.key});
+>>>>>>> main:lib/toko/home.dart
 
   @override
   Widget build(BuildContext context) {
@@ -98,7 +103,7 @@ class _TestWidgetState extends State<TestWidget> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => MainScreen()),
+                  MaterialPageRoute(builder: (context) => MainMakananScreen()),
                 );
               },
               style: ElevatedButton.styleFrom(
